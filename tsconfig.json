@@ -1,0 +1,18 @@
+{
+  "extends": "./packages/pkg-lib-typescript/base-tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": "./packages"
+  },
+  "include": [
+    "next-env.d.ts",
+    "packages/pkg-*/src/**/*.ts",
+    "packages/pkg-*/src/**/*.tsx",
+    "pages/**/*.ts",
+    "pages/**/*.tsx"
+  ],
+  "exclude": []
+}

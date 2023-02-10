@@ -1,0 +1,11 @@
+{
+  "name": "pkg-lib-typescript",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "@tsconfig/node18-strictest-esm": "1.0.1"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2022"
+    ],
+    "allowJs": false,
+    "checkJs": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": false,
+    "preserveSymlinks": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": true,
+    "sourceMap": true
+  }
+}
