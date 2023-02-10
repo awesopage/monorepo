@@ -12,7 +12,8 @@
     "packages/pkg-*/src/**/*.ts",
     "packages/pkg-*/src/**/*.tsx",
     "pages/**/*.ts",
-    "pages/**/*.tsx"
+    "pages/**/*.tsx",
+    "scripts/**/*.ts"
   ],
   "exclude": []
 }

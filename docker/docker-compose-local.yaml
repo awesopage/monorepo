@@ -1,0 +1,13 @@
+services:
+  database:
+    image: cockroachdb/cockroach:v22.2.3
+    restart: always
+    command: ['start-single-node', '--insecure']
+    volumes:
+      - database_volume:/cockroach/cockroach-data
+    ports:
+      - ${DATABASE_CONSOLE_PORT:-4920}:8080
+      - ${DATABASE_CONNECTION_PORT:-4922}:26257
+
+volumes:
+  database_volume: {}

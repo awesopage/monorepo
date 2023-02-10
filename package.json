@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "next lint --fix",
     "compile": "tsc",
-    "dev": "npm run compile && cross-env NODE_ENV=development next dev -p 4000"
+    "dev": "npm run compile && cross-env NODE_ENV=development next dev -p 4000",
+    "local-services": "tsx ./scripts/local-services.ts"
   },
   "engines": {
     "node": "18.x"
@@ -14,7 +15,8 @@
   "dependencies": {
     "next": "13.1.6",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "wretch": "2.4.1"
   },
   "devDependencies": {
     "@types/node": "18.13.0",
@@ -22,6 +24,8 @@
     "@typescript-eslint/eslint-plugin": "5.51.0",
     "@typescript-eslint/parser": "5.51.0",
     "cross-env": "7.0.3",
+    "cross-spawn": "7.0.3",
+    "dotenv-flow": "3.2.0",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "eslint-config-prettier": "8.6.0",

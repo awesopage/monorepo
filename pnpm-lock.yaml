@@ -9,6 +9,8 @@ importers:
       '@typescript-eslint/eslint-plugin': 5.51.0
       '@typescript-eslint/parser': 5.51.0
       cross-env: 7.0.3
+      cross-spawn: 7.0.3
+      dotenv-flow: 3.2.0
       eslint: 8.33.0
       eslint-config-next: 13.1.6
       eslint-config-prettier: 8.6.0
@@ -24,16 +26,20 @@ importers:
       react-dom: 18.2.0
       tsx: 3.12.3
       typescript: 4.9.5
+      wretch: 2.4.1
     dependencies:
       next: 13.1.6_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      wretch: 2.4.1
     devDependencies:
       '@types/node': 18.13.0
       '@types/react': 18.0.27
       '@typescript-eslint/eslint-plugin': 5.51.0_b635kmla6dsb4frxfihkw4m47e
       '@typescript-eslint/parser': 5.51.0_4vsywjlpuriuw3tl5oq6zy5a64
       cross-env: 7.0.3
+      cross-spawn: 7.0.3
+      dotenv-flow: 3.2.0
       eslint: 8.33.0
       eslint-config-next: 13.1.6_4vsywjlpuriuw3tl5oq6zy5a64
       eslint-config-prettier: 8.6.0_eslint@8.33.0
@@ -991,6 +997,18 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
+    dev: true
+
+  /dotenv-flow/3.2.0:
+    resolution: {integrity: sha512-GEB6RrR4AbqDJvNSFrYHqZ33IKKbzkvLYiD5eo4+9aFXr4Y4G+QaFrB/fNp0y6McWBmvaPn3ZNjIufnj8irCtg==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      dotenv: 8.6.0
+    dev: true
+
+  /dotenv/8.6.0:
+    resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
+    engines: {node: '>=10'}
     dev: true
 
   /emoji-regex/9.2.2:
@@ -2794,6 +2812,11 @@ packages:
   /wrappy/1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
+
+  /wretch/2.4.1:
+    resolution: {integrity: sha512-jHJFJ968p/JNVrTZ+gJ1vZekk+3EkDsYHwamHLR+xMKur9vBv8lhBe2+XENbXQtygdO0JGtjRJeKc9xiuwW6lQ==}
+    engines: {node: '>=14'}
+    dev: false
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}

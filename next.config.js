@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   eslint: {
-    dirs: ['pages', ...configFiles],
+    dirs: ['pages', 'scripts', ...configFiles],
   },
 }
 
