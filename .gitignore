@@ -353,3 +353,4 @@ $RECYCLE.BIN/
 .vscode
 
 config/*.local
+workspace-packages.json

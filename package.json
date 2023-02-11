@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "boot": "pnpm install && npm run model-schema generate && pnpm list --depth -1 --recursive --json > workspace-packages.json",
     "build": "cross-env NODE_ENV=production next build",
     "build-check": "cross-env NODE_ENV=production ANALYZE=true next build",
     "lint": "next lint --fix",

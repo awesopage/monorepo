@@ -1,3 +1,5 @@
+import fsp from 'node:fs/promises'
+
 import bundleAnalyzer from '@next/bundle-analyzer'
 
 const withBundleAnalyzer = bundleAnalyzer({
@@ -5,6 +7,7 @@ const withBundleAnalyzer = bundleAnalyzer({
   openAnalyzer: false,
 })
 
+const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url)))
 const configFiles = ['next.config.js', '.eslintrc.cjs']
 
 /**
@@ -15,7 +18,15 @@ const nextConfig = withBundleAnalyzer({
   reactStrictMode: true,
   poweredByHeader: false,
   eslint: {
-    dirs: ['pages', 'scripts', ...configFiles],
+    dirs: [
+      ...workspacePackages
+        .map(({ name }) => name)
+        .filter((name) => name.startsWith('pkg-'))
+        .map((name) => `packages/${name}/src`),
+      'pages',
+      'scripts',
+      ...configFiles,
+    ],
   },
 })
 
