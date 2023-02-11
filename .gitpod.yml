@@ -2,7 +2,8 @@ tasks:
   - name: chore
     before: >
       gp sync-await boot &&
-      nvm use default
+      nvm use default &&
+      pnpm install-tools
     command: pnpm lint
   - name: app
     # Based on https://www.gitpod.io/docs/introduction/languages/javascript#node-versions

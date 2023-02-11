@@ -10,7 +10,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 })
 
 const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url)))
-const configFiles = ['next.config.js', '.eslintrc.cjs']
+const configFiles = ['next.config.js', '.eslintrc.cjs', 'playwright.config.ts']
 
 /**
  * @type {import('next').NextConfig}
@@ -28,6 +28,7 @@ const nextConfig = withBundleAnalyzer({
         .map((name) => `packages/${name}/src`),
       'pages',
       'scripts',
+      'tests',
       ...configFiles,
     ],
   },

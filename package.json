@@ -5,9 +5,11 @@
   "private": true,
   "scripts": {
     "boot": "pnpm install && npm run model-schema generate && pnpm list --depth -1 --recursive --json > workspace-packages.json",
+    "install-tools": "playwright install-deps && playwright install",
     "build": "del-cli build/production && cross-env NODE_ENV=production next build",
     "build-check": "del-cli build/production && cross-env NODE_ENV=production ANALYZE=true next build",
     "start": "kill-port 4000 && cross-env NODE_ENV=production next start -p 4000",
+    "test": "npm run compile && playwright test",
     "clean": "del-cli build tsconfig.tsbuildinfo && pnpm --filter pkg-* run clean",
     "lint": "cross-env NODE_ENV=development next lint --fix",
     "compile": "tsc",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "13.1.6",
+    "@playwright/test": "1.30.0",
     "@types/node": "18.13.0",
     "@types/react": "18.0.27",
     "@typescript-eslint/eslint-plugin": "5.51.0",
@@ -48,6 +51,7 @@
     "eslint-plugin-sonarjs": "0.18.0",
     "http-server": "14.1.1",
     "kill-port": "2.0.1",
+    "playwright-core": "1.30.0",
     "prettier": "2.8.4",
     "prisma": "4.10.1",
     "tsx": "3.12.3",

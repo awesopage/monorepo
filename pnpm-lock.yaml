@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@next/bundle-analyzer': 13.1.6
+      '@playwright/test': 1.30.0
       '@prisma/client': 4.10.1
       '@types/node': 18.13.0
       '@types/react': 18.0.27
@@ -27,6 +28,7 @@ importers:
       http-server: 14.1.1
       kill-port: 2.0.1
       next: 13.1.6
+      playwright-core: 1.30.0
       prettier: 2.8.4
       prisma: 4.10.1
       react: 18.2.0
@@ -42,6 +44,7 @@ importers:
       wretch: 2.4.1
     devDependencies:
       '@next/bundle-analyzer': 13.1.6
+      '@playwright/test': 1.30.0
       '@types/node': 18.13.0
       '@types/react': 18.0.27
       '@typescript-eslint/eslint-plugin': 5.51.0_b635kmla6dsb4frxfihkw4m47e
@@ -62,6 +65,7 @@ importers:
       eslint-plugin-sonarjs: 0.18.0_eslint@8.33.0
       http-server: 14.1.1
       kill-port: 2.0.1
+      playwright-core: 1.30.0
       prettier: 2.8.4
       prisma: 4.10.1
       tsx: 3.12.3
@@ -565,6 +569,15 @@ packages:
       picocolors: 1.0.0
       tiny-glob: 0.2.9
       tslib: 2.5.0
+    dev: true
+
+  /@playwright/test/1.30.0:
+    resolution: {integrity: sha512-SVxkQw1xvn/Wk/EvBnqWIq6NLo1AppwbYOjNLmyU0R1RoQ3rLEBtmjTnElcnz8VEtn11fptj1ECxK0tgURhajw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.13.0
+      playwright-core: 1.30.0
     dev: true
 
   /@polka/url/1.0.0-next.21:
@@ -3044,6 +3057,12 @@ packages:
       sonic-boom: 3.2.1
       thread-stream: 2.3.0
     dev: false
+
+  /playwright-core/1.30.0:
+    resolution: {integrity: sha512-7AnRmTCf+GVYhHbLJsGUtskWTE33SwMZkybJ0v6rqR1boxq2x36U7p1vDRV7HO2IwTZgmycracLxPEJI49wu4g==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /portfinder/1.0.32:
     resolution: {integrity: sha512-on2ZJVVDXRADWE6jnQaX0ioEylzgBpQk8r55NE4wjXW1ZxO+BgDlY6DXwj20i0V8eB4SenDQ00WEaxfiIQPcxg==}
