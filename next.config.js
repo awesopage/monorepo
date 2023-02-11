@@ -2,6 +2,8 @@ import fsp from 'node:fs/promises'
 
 import bundleAnalyzer from '@next/bundle-analyzer'
 
+import { nodeEnv } from './scripts/lib/dotenv-loader.js'
+
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
@@ -17,6 +19,7 @@ const nextConfig = withBundleAnalyzer({
   swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
+  distDir: `build/${nodeEnv}/nextjs`,
   eslint: {
     dirs: [
       ...workspacePackages

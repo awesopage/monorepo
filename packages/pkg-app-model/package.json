@@ -3,12 +3,15 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "compile": "tsc"
+    "compile": "tsc",
+    "clean": "del-cli tsconfig.tsbuildinfo",
+    "clean-full": "npm run clean && del-cli node_modules client"
   },
   "engines": {
     "node": "18.x"
   },
   "devDependencies": {
+    "del-cli": "5.0.0",
     "pkg-lib-typescript": "workspace:*",
     "typescript": "4.9.5"
   }

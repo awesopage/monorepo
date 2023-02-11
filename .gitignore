@@ -351,6 +351,7 @@ $RECYCLE.BIN/
 
 .idea
 .vscode
+build
 
 config/*.local
 workspace-packages.json

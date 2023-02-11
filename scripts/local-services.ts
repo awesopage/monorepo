@@ -1,12 +1,11 @@
-import './lib/dotenv-loader.js'
-
 import wretch from 'wretch'
 
+import { nodeEnv } from './lib/dotenv-loader.js'
 import { isMainModule, runScript } from './lib/script-runner.js'
 import { runCommand, waitFor } from './lib/script-utils.js'
 
 const dockerCommand = 'docker'
-const composeArgv = ['compose', '-p', 'ap_local', '-f', 'docker/docker-compose-local.yaml']
+const composeArgv = ['compose', '-p', `ap_${nodeEnv}`, '-f', 'docker/docker-compose-local.yaml']
 
 const taskById: Record<string, () => Promise<void>> = {
   start: async () => {

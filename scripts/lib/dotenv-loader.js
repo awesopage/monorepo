@@ -14,10 +14,12 @@ const loadEnv = (env) => {
 
   const configFileNames = configFilePaths.map((configFilePath) => path.relative(configDirPath, configFilePath))
 
-  console.log(`Loading environment ${env} from ${configFileNames.length} files [${configFileNames.join(', ')}]...`)
+  console.log(`Loading environment '${env}' from ${configFileNames.length} files [${configFileNames.join(', ')}]...`)
 
   dotenvFlow.load(configFilePaths, { silent: true })
 }
 
 // Use development env for tests
 loadEnv(nodeEnv)
+
+export { nodeEnv }
