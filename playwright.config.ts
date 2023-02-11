@@ -21,11 +21,11 @@ const config: PlaywrightTestConfig = {
       maxDiffPixelRatio: 0.05,
     },
   },
-  outputDir: 'build/test/playwright/output',
+  outputDir: 'output/test/playwright/tmp',
   reporter: [
     ['list'],
-    ['html', { open: 'never', outputFolder: 'build/test/playwright/html' }],
-    ['junit', { outputFile: 'build/test/playwright/junit.xml' }],
+    ['html', { open: 'never', outputFolder: 'output/test/playwright/html' }],
+    ['junit', { outputFile: 'output/test/playwright/junit.xml' }],
   ],
   // eslint-disable-next-line no-null/no-null
   reportSlowTests: null,

@@ -19,7 +19,7 @@ const nextConfig = withBundleAnalyzer({
   swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
-  distDir: `build/${nodeEnv}/nextjs`,
+  distDir: `output/${nodeEnv}/nextjs`,
   eslint: {
     dirs: [
       ...workspacePackages
