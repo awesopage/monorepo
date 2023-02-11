@@ -16,16 +16,6 @@ module.exports = {
   },
   rules: {
     'file-progress/activate': 1,
-    '@typescript-eslint/no-type-alias': [
-      'error',
-      {
-        allowAliases: 'always',
-        allowCallbacks: 'always',
-        allowConditionalTypes: 'always',
-        allowMappedTypes: 'always',
-        allowTupleTypes: 'always',
-      },
-    ],
     'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
     'max-lines-per-function': ['error', { max: 60, skipBlankLines: true, skipComments: true }],
     'sonarjs/prefer-immediate-return': 'off',

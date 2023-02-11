@@ -67,7 +67,32 @@ importers:
       tsx: 3.12.3
       typescript: 4.9.5
 
+  packages/pkg-app-api:
+    specifiers:
+      del-cli: 5.0.0
+      pkg-app-model: workspace:*
+      pkg-app-shared: workspace:*
+      pkg-lib-typescript: workspace:*
+      typescript: 4.9.5
+    dependencies:
+      pkg-app-model: link:../pkg-app-model
+      pkg-app-shared: link:../pkg-app-shared
+    devDependencies:
+      del-cli: 5.0.0
+      pkg-lib-typescript: link:../pkg-lib-typescript
+      typescript: 4.9.5
+
   packages/pkg-app-model:
+    specifiers:
+      del-cli: 5.0.0
+      pkg-lib-typescript: workspace:*
+      typescript: 4.9.5
+    devDependencies:
+      del-cli: 5.0.0
+      pkg-lib-typescript: link:../pkg-lib-typescript
+      typescript: 4.9.5
+
+  packages/pkg-app-shared:
     specifiers:
       del-cli: 5.0.0
       pkg-lib-typescript: workspace:*
