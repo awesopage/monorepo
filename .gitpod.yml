@@ -1,0 +1,32 @@
+tasks:
+  - name: dev chore
+    before: >
+      gp sync-await boot &&
+      nvm use default
+    command: pnpm lint
+  - name: dev server
+    # Based on https://www.gitpod.io/docs/introduction/languages/javascript#node-versions
+    before: >
+      nvm install 18 &&
+      nvm alias default 18 &&
+      echo "nvm use default" >> ~/.bashrc.d/51-nvm-fix &&
+      pnpm boot &&
+      gp sync-done boot &&
+      pnpm local-services start
+    command: pnpm dev
+
+ports:
+  - name: dev application
+    port: 4000
+    onOpen: notify
+    visibility: public
+  - name: static server
+    port: 4444
+    onOpen: notify
+    visibility: public
+  - name: dev ports
+    port: 4900-4999
+    onOpen: ignore
+  - name: test ports
+    port: 4800-4899
+    onOpen: ignore

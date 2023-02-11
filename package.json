@@ -14,7 +14,7 @@
     "dev": "npm run compile && cross-env NODE_ENV=development next dev -p 4000",
     "local-services": "tsx ./scripts/local-services.ts",
     "model-schema": "tsx ./scripts/model-schema.ts",
-    "serve": "http-server"
+    "serve": "http-server -p 4444"
   },
   "engines": {
     "node": "18.x"
