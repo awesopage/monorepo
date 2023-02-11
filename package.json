@@ -10,12 +10,14 @@
     "compile": "tsc",
     "dev": "npm run compile && cross-env NODE_ENV=development next dev -p 4000",
     "local-services": "tsx ./scripts/local-services.ts",
+    "model-schema": "tsx ./scripts/model-schema.ts",
     "serve": "http-server"
   },
   "engines": {
     "node": "18.x"
   },
   "dependencies": {
+    "@prisma/client": "4.10.1",
     "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -41,6 +43,7 @@
     "eslint-plugin-sonarjs": "0.18.0",
     "http-server": "14.1.1",
     "prettier": "2.8.4",
+    "prisma": "4.10.1",
     "tsx": "3.12.3",
     "typescript": "4.9.5"
   }

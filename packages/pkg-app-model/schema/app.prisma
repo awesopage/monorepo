@@ -1,0 +1,28 @@
+datasource db {
+  provider = "cockroachdb"
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // Use a specific output path, based on https://github.com/prisma/prisma/issues/7661
+  output = "../client"
+}
+
+enum RoleEnum {
+  ADMIN
+  REVIEWER
+
+  @@map("app_role")
+}
+
+model User {
+  id BigInt @id @default(autoincrement())
+  email String @unique
+  displayName String @map("display_name")
+  roles RoleEnum[]
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+
+  @@map("app_user")
+}

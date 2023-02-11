@@ -1,0 +1,15 @@
+{
+  "name": "pkg-app-model",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "compile": "tsc"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "devDependencies": {
+    "pkg-lib-typescript": "workspace:*",
+    "typescript": "4.9.5"
+  }
+}

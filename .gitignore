@@ -351,3 +351,5 @@ $RECYCLE.BIN/
 
 .idea
 .vscode
+
+config/*.local
