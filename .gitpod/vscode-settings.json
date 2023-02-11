@@ -1,0 +1,9 @@
+{
+  "editor.tabSize": 2,
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.format.semicolons": "remove",
+  "typescript.format.semicolons": "remove",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}

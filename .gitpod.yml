@@ -1,10 +1,10 @@
 tasks:
-  - name: dev chore
+  - name: chore
     before: >
       gp sync-await boot &&
       nvm use default
     command: pnpm lint
-  - name: dev server
+  - name: app
     # Based on https://www.gitpod.io/docs/introduction/languages/javascript#node-versions
     before: >
       nvm install 18 &&
@@ -12,19 +12,20 @@ tasks:
       echo "nvm use default" >> ~/.bashrc.d/51-nvm-fix &&
       pnpm boot &&
       gp sync-done boot &&
+      node ./scripts/workspace.js prepare-gitpod &&
       pnpm local-services start
     command: pnpm dev
 
 ports:
-  - name: dev application
+  - name: app-server
     port: 4000
     onOpen: notify
     visibility: public
-  - name: static server
+  - name: static-server
     port: 4444
     onOpen: notify
     visibility: public
-  - name: dev ports
+  - name: development ports
     port: 4900-4999
     onOpen: ignore
   - name: test ports
