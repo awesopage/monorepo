@@ -2,6 +2,8 @@ import type { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
   testDir: 'tests',
+  globalSetup: 'tests/global-setup.ts',
+  globalTeardown: 'tests/global-teardown.ts',
   snapshotPathTemplate: `snapshots/{testFilePath}/{arg}{ext}`,
   maxFailures: 10,
   timeout: 30_000,
@@ -9,7 +11,7 @@ const config: PlaywrightTestConfig = {
   retries: process.env.CI ? 2 : 0,
   workers: 1,
   use: {
-    baseURL: 'http://localhost:4000',
+    baseURL: 'http://localhost:4800',
     screenshot: {
       mode: 'only-on-failure',
       fullPage: true,

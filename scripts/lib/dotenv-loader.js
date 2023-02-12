@@ -5,12 +5,15 @@ import { fileURLToPath } from 'node:url'
 import dotenvFlow from 'dotenv-flow'
 
 const configDirPath = fileURLToPath(new URL('../../config', import.meta.url))
-const nodeEnv = process.env.NODE_ENV ?? 'development'
+
+export const nodeEnv = process.env.NODE_ENV ?? 'development'
 
 const loadEnv = (env) => {
-  const configFilePaths = dotenvFlow
-    .listDotenvFiles(configDirPath, { node_env: env })
-    .filter((configFilePath) => fs.existsSync(configFilePath))
+  const configFilePaths = [
+    // Use development env for tests
+    ...(env === 'test' ? dotenvFlow.listDotenvFiles(configDirPath, { node_env: 'development' }) : []),
+    ...dotenvFlow.listDotenvFiles(configDirPath, { node_env: env }),
+  ].filter((configFilePath) => fs.existsSync(configFilePath))
 
   const configFileNames = configFilePaths.map((configFilePath) => path.relative(configDirPath, configFilePath))
 
@@ -19,7 +22,4 @@ const loadEnv = (env) => {
   dotenvFlow.load(configFilePaths, { silent: true })
 }
 
-// Use development env for tests
 loadEnv(nodeEnv)
-
-export { nodeEnv }
