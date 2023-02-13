@@ -5,7 +5,10 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": "./packages"
+    "baseUrl": "./packages",
+    "paths": {
+      "tests/*": ["../tests/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

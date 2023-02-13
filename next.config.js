@@ -10,7 +10,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 })
 
 const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url)))
-const configFiles = ['next.config.js', '.eslintrc.cjs', 'playwright.config.ts']
+const configFiles = ['next.config.js', '.eslintrc.cjs', 'nyc.config.cjs', 'playwright.config.ts']
 
 /**
  * @type {import('next').NextConfig}
@@ -19,6 +19,9 @@ const nextConfig = withBundleAnalyzer({
   swcMinify: true,
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    swcPlugins: [['swc-plugin-coverage-instrument', {}]],
+  },
   distDir: `output/${nodeEnv}/nextjs`,
   eslint: {
     dirs: [

@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test'
-
 import type { HealthStatusDTO } from 'pkg-app-shared/src/server/HealthStatusDTO'
+import { expect, test } from 'tests/common/TestUtils'
 
 test.describe('HealthApiHandler', () => {
   test('should return ok health status', async ({ page }) => {
