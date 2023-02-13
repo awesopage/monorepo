@@ -1,11 +1,11 @@
-import '../scripts/lib/dotenv-loader.js'
+import 'scripts/lib/dotenv-loader.js'
 
 import fsp from 'node:fs/promises'
 
 import killPort from 'kill-port'
 import wretch from 'wretch'
 
-import { delay } from '../scripts/lib/script-utils.js'
+import { delay } from 'scripts/lib/script-utils'
 
 const globalTeardown = async () => {
   console.log()

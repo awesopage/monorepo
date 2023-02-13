@@ -1,7 +1,7 @@
-import './lib/dotenv-loader.js'
+import 'scripts/lib/dotenv-loader.js'
 
-import { isMainModule, runScript } from './lib/script-runner.js'
-import { runCommand } from './lib/script-utils.js'
+import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
+import { runCommand } from 'scripts/lib/script-utils'
 
 const prismaCommand = './node_modules/.bin/prisma'
 const prismaArgv = ['--schema=packages/pkg-app-model/schema/app.prisma']

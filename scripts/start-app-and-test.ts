@@ -1,6 +1,6 @@
 import concurrently from 'concurrently'
 
-import { isMainModule, runScript } from './lib/script-runner.js'
+import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 
 const startAppAndTest = async (argv: string[]) => {
   const testArgv = argv.map((argv) => `"${argv}"`).join(' ')

@@ -1,8 +1,8 @@
 import wretch from 'wretch'
 
-import { nodeEnv } from './lib/dotenv-loader.js'
-import { isMainModule, runScript } from './lib/script-runner.js'
-import { runCommand, waitFor } from './lib/script-utils.js'
+import { nodeEnv } from 'scripts/lib/dotenv-loader.js'
+import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
+import { runCommand, waitFor } from 'scripts/lib/script-utils'
 
 const dockerCommand = 'docker'
 const composeArgv = ['compose', '-p', `ap_${nodeEnv}`, '-f', 'docker/docker-compose-local.yaml']
