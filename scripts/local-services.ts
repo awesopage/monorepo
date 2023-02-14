@@ -18,6 +18,8 @@ const taskById: Record<string, () => Promise<void>> = {
 
       return true
     })
+
+    await runCommand('npm', ['run', 'model-schema', 'migrate'])
   },
   stop: async () => {
     await runCommand(dockerCommand, [...composeArgv, 'down'])

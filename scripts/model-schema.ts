@@ -1,5 +1,7 @@
 import 'scripts/lib/dotenv-loader.js'
 
+import wretch from 'wretch'
+
 import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 import { runCommand } from 'scripts/lib/script-utils'
 
@@ -15,6 +17,9 @@ const taskById: Record<string, () => Promise<void>> = {
   },
   generate: async () => {
     await runCommand(prismaCommand, ['generate', ...prismaArgv])
+  },
+  seed: async () => {
+    await wretch(process.env.NEXT_PUBLIC_APP_BASE_URL).post({}, '/api/__test/data/seed').res()
   },
 }
 
