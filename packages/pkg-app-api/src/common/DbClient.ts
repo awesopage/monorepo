@@ -57,12 +57,10 @@ const createPrismaClient = (): PrismaClient => {
 // https://www.prisma.io/docs/guides/database/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const globalThisAny = globalThis as any
-const cachedDbClient: DbClient = globalThisAny.singlePrismaClient ?? createPrismaClient()
+const prismaClient: PrismaClient = globalThisAny.singlePrismaClient ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
-  globalThisAny.singlePrismaClient = cachedDbClient
+  globalThisAny.singlePrismaClient = prismaClient
 }
 
-export const getDbClient = (): DbClient => {
-  return cachedDbClient
-}
+export { prismaClient }
