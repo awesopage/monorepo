@@ -12,7 +12,7 @@ const globalTeardown = async () => {
   console.log('Collecting api coverage...')
   console.log()
 
-  const coverageJSON = await wretch(process.env.NEXT_PUBLIC_APP_BASE_URL).post({}, '/api/__testing/coverage').text()
+  const coverageJSON = await wretch(process.env.NEXT_PUBLIC_APP_BASE_URL).post({}, '/api/__test/coverage').text()
 
   const outputDirPath = new URL('../output/test/coverage/tmp/', import.meta.url)
   await fsp.mkdir(outputDirPath, { recursive: true })
