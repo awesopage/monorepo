@@ -6,7 +6,7 @@ import type { RoleEnum, User } from 'pkg-app-model/client'
 
 export type FindOrCreateUserOptions = Readonly<{
   email: string
-  displayName: string
+  displayName?: string
 }>
 
 export const findOrCreateUser = async (dbClient: DbClient, options: FindOrCreateUserOptions): Promise<User> => {
@@ -20,7 +20,13 @@ export const findOrCreateUser = async (dbClient: DbClient, options: FindOrCreate
 
   const user = await dbClient.user.upsert({
     where: { email },
-    create: { email, displayName, roles: [], createdAt: now, updatedAt: now },
+    create: {
+      email,
+      displayName: displayName || email.split('@')[0]?.toLowerCase() || email,
+      roles: [],
+      createdAt: now,
+      updatedAt: now,
+    },
     update: {},
   })
 
