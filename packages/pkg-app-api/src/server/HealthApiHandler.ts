@@ -1,7 +1,7 @@
 import type { NextApiHandler, NextApiResponse } from 'next'
 
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
-import { createApiRouter } from 'pkg-app-api/src/common/RouterUtils'
+import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
 import { checkDatabaseHealth } from 'pkg-app-api/src/server/HealthService'
 import type { HealthStatusDTO } from 'pkg-app-shared/src/server/HealthStatusDTO'
 

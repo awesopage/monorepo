@@ -1,6 +1,7 @@
 import type { NextApiHandler } from 'next'
 
-import { createApiRouter, sendApiResponse } from 'pkg-app-api/src/common/RouterUtils'
+import { sendApiResponse } from 'pkg-app-api/src/router/ApiResponse'
+import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
 
 const testCoverageApiHandler: NextApiHandler = createApiRouter()
   .post((req, res) => {
