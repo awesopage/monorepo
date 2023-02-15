@@ -2,7 +2,7 @@ import 'scripts/lib/dotenv-loader.js'
 
 import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 import { runCommand } from 'scripts/lib/script-utils'
-import { resetTestData } from 'tests/common/TestUtils'
+import { testDataManager } from 'tests/data/TestDataManager'
 
 const prismaCommand = './node_modules/.bin/prisma'
 const prismaArgv = ['--schema=packages/pkg-app-model/schema/app.prisma']
@@ -18,7 +18,7 @@ const taskById: Record<string, () => Promise<void>> = {
     await runCommand(prismaCommand, ['generate', ...prismaArgv])
   },
   seed: async () => {
-    await resetTestData()
+    await testDataManager.reset()
   },
 }
 

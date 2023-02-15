@@ -2,7 +2,7 @@ import 'scripts/lib/dotenv-loader.js'
 
 import wretch from 'wretch'
 
-import { runCommand, waitFor } from 'scripts/lib/script-utils'
+import { waitFor } from 'scripts/lib/script-utils'
 
 const globalSetup = async () => {
   await waitFor('Waiting for application to be ready...', 5, async () => {
@@ -10,12 +10,6 @@ const globalSetup = async () => {
 
     return true
   })
-
-  console.log()
-  console.log('Creating test data...')
-  console.log()
-
-  await runCommand('npm', ['run', 'model-schema', 'seed'])
 }
 
 export default globalSetup
