@@ -1,11 +1,11 @@
 import type { NextApiHandler } from 'next'
 
 import { createApiRouter, sendApiResponse } from 'pkg-app-api/src/common/RouterUtils'
-import { resetTestData } from 'tests/common/TestDataManager'
+import { testDataManager } from 'tests/data/TestDataManager'
 
 const testDataSeedApiHandler: NextApiHandler = createApiRouter()
   .post(async (req, res) => {
-    await resetTestData()
+    await testDataManager.reset()
 
     sendApiResponse(res, {})
   })

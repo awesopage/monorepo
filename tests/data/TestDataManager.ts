@@ -1,9 +1,26 @@
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { createTestUsers } from 'tests/data/TestUsers'
 
-export const resetTestData = async () => {
-  await truncateAllTables()
-  await createTestUsers()
+export const testDataManager = {
+  query: async (model: string, where?: object) => {
+    if (!(model in prismaClient)) {
+      throw new Error(`Unknown model: ${model}`)
+    }
+
+    const modelClient = prismaClient[model as keyof typeof prismaClient]
+
+    if (!('findMany' in modelClient) || typeof modelClient.findMany !== 'function') {
+      throw new Error(`Model ${model} does not have findMany()`)
+    }
+
+    const data = await modelClient.findMany({ where })
+
+    return data
+  },
+  reset: async () => {
+    await truncateAllTables()
+    await createTestUsers()
+  },
 }
 
 const truncateAllTables = async (): Promise<string[]> => {
