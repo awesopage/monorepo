@@ -19,7 +19,7 @@ const taskById: Record<string, () => Promise<void>> = {
     await runCommand(prismaCommand, ['generate', ...prismaArgv])
   },
   seed: async () => {
-    await wretch(process.env.NEXT_PUBLIC_APP_BASE_URL).post({}, '/api/__test/data/seed').res()
+    await wretch(process.env.INTERNAL_APP_BASE_URL).post({}, '/api/__test/data/seed').res()
   },
 }
 
