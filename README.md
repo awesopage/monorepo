@@ -12,6 +12,10 @@
 
 ## Development
 
+Create a file `config/.env.development.local` then populate the following values:
+
+- `LOCAL_WORKSPACE_PATH`: the checkout path of this repository.
+
 ### Install dependencies
 
 - Install Node.js v18.

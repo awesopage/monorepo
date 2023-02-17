@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
   // Use a specific output path, based on https://github.com/prisma/prisma/issues/7661
   output = "../client"
 }

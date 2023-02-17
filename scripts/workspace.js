@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
 
 import cpy from 'cpy'
 
@@ -22,6 +23,7 @@ const setGitpodEnv = async (envPath) => {
   const gitpodUrlSuffix = `${process.env.GITPOD_WORKSPACE_ID}.${process.env.GITPOD_WORKSPACE_CLUSTER_HOST}`
 
   setEnv(envLines, 'NEXT_PUBLIC_APP_BASE_URL', `https://4000-${gitpodUrlSuffix}`)
+  setEnv(envLines, 'LOCAL_WORKSPACE_PATH', fileURLToPath(new URL('..', import.meta.url)))
 
   await fsp.writeFile(envPath, envLines.join('\n'))
 }

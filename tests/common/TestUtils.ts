@@ -1,3 +1,8 @@
+import assert from 'node:assert'
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+
 import { expect as baseExpect, test as baseTest } from 'playwright-test-coverage'
 import wretch from 'wretch'
 
@@ -14,9 +19,26 @@ export const test = baseTest.extend<CustomFixtures>({
   resetDatabase: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      console.log('Resetting test data...')
+      assert.ok(process.env.LOCAL_WORKSPACE_PATH)
+      assert.ok(process.env.DATABASE_WRITE_LOG_PATH)
 
-      await testDataApi.post({}, '/seed').res()
+      const writeLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_WRITE_LOG_PATH)
+
+      const isDatabaseDirty = fs.existsSync(writeLogPath)
+
+      if (isDatabaseDirty) {
+        console.log()
+        console.log('Resetting test data...')
+        console.log()
+
+        await testDataApi.post({}, '/seed').res()
+
+        await fsp.rm(writeLogPath)
+      } else {
+        console.log()
+        console.log('No write operation, can reuse current data')
+        console.log()
+      }
 
       await use()
     },

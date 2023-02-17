@@ -1,6 +1,11 @@
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+
 import { createLogger } from 'pkg-app-api/src/common/LoggingUtils'
 import type { Prisma } from 'pkg-app-model/client'
 import { PrismaClient } from 'pkg-app-model/client'
+import { assertDefined } from 'pkg-app-shared/src/common/AssertUtils'
 
 const logger = createLogger('DbClient')
 
@@ -26,38 +31,74 @@ const getLogConfig = (): LogConfig => {
   ]
 }
 
-const createPrismaClient = (): PrismaClient => {
+const DB_WRITE_OPERATION_PREFIXES = ['create', 'update', 'delete', 'upsert']
+
+const logWriteOperation = async (model: string, operation: string, outputPath: string) => {
+  if (DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.startsWith(prefix))) {
+    try {
+      await fsp.appendFile(outputPath, `${model}.${operation}\n`)
+    } catch (err) {
+      console.log(err)
+
+      throw err
+    }
+  }
+}
+
+type ConfiguredPrismaClient = Omit<PrismaClient, '$use'>
+
+const createPrismaClient = (): ConfiguredPrismaClient => {
   const databaseUrl = process.env.DATABASE_URL
 
-  const client: PrismaClient<Prisma.PrismaClientOptions, 'info' | 'warn' | 'error' | 'query'> = new PrismaClient({
+  const baseClient: PrismaClient<Prisma.PrismaClientOptions, 'info' | 'warn' | 'error' | 'query'> = new PrismaClient({
     datasources: {
       ...(databaseUrl ? { db: { url: databaseUrl } } : {}),
     },
     log: getLogConfig(),
   })
 
-  client.$on('query', (queryEvent) => {
+  baseClient.$on('query', (queryEvent) => {
     const params = queryEvent.params.substring(0, 500)
 
     logger.debug(`Query ${queryEvent.query} with params ${params} took ${queryEvent.duration}ms.`)
   })
-  client.$on('info', (logEvent) => {
+  baseClient.$on('info', (logEvent) => {
     logger.info(logEvent.message)
   })
-  client.$on('warn', (logEvent) => {
+  baseClient.$on('warn', (logEvent) => {
     logger.warn(logEvent.message)
   })
-  client.$on('error', (logEvent) => {
+  baseClient.$on('error', (logEvent) => {
     logger.error(logEvent.message)
   })
 
-  return client
+  if (process.env.DATABASE_WRITE_LOG_PATH) {
+    assertDefined(process.env.LOCAL_WORKSPACE_PATH, 'LOCAL_WORKSPACE_PATH')
+
+    const writeLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_WRITE_LOG_PATH)
+    console.log(`Use writeLogPath=${writeLogPath}`)
+    fs.mkdirSync(path.dirname(writeLogPath), { recursive: true })
+
+    return baseClient.$extends({
+      query: {
+        $allModels: {
+          $allOperations: async ({ model, operation, args, query }) => {
+            await logWriteOperation(model, operation, writeLogPath)
+
+            return query(args)
+          },
+        },
+      },
+    })
+  }
+
+  return baseClient
 }
 
 // https://www.prisma.io/docs/guides/database/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const globalThisAny = globalThis as any
-const prismaClient: PrismaClient = globalThisAny.singlePrismaClient ?? createPrismaClient()
+const prismaClient: ConfiguredPrismaClient = globalThisAny.singlePrismaClient ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') {
   globalThisAny.singlePrismaClient = prismaClient
