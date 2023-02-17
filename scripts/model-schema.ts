@@ -1,8 +1,9 @@
 import 'scripts/lib/dotenv-loader.js'
 
+import wretch from 'wretch'
+
 import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 import { runCommand } from 'scripts/lib/script-utils'
-import { testDataManager } from 'tests/data/TestDataManager'
 
 const prismaCommand = './node_modules/.bin/prisma'
 const prismaArgv = ['--schema=packages/pkg-app-model/schema/app.prisma']
@@ -18,7 +19,7 @@ const taskById: Record<string, () => Promise<void>> = {
     await runCommand(prismaCommand, ['generate', ...prismaArgv])
   },
   seed: async () => {
-    await testDataManager.reset()
+    await wretch(process.env.NEXT_PUBLIC_APP_BASE_URL).post({}, '/api/__test/data/seed').res()
   },
 }
 
