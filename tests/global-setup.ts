@@ -57,11 +57,11 @@ const globalSetup = async () => {
 
   await runCommand('npm', ['run', 'model-schema', 'seed'])
 
+  await collectAuthStates()
+
   if (fs.existsSync(operationLogPath)) {
     await fsp.rm(operationLogPath)
   }
-
-  await collectAuthStates()
 }
 
 export default globalSetup
