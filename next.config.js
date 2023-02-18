@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
   openAnalyzer: false,
 })
 
-const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url)))
+const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url), 'utf-8'))
 const configFiles = ['next.config.js', '.eslintrc.cjs', 'nyc.config.cjs', 'playwright.config.ts']
 
 /**

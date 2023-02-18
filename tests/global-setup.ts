@@ -1,6 +1,7 @@
 import 'scripts/lib/dotenv-loader.js'
 
 import assert from 'node:assert'
+import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
 
@@ -20,13 +21,20 @@ const globalSetup = async () => {
   console.log()
 
   assert.ok(process.env.LOCAL_WORKSPACE_PATH)
-  assert.ok(process.env.DATABASE_WRITE_LOG_PATH)
+  assert.ok(process.env.DATABASE_OPERATION_LOG_PATH)
+  assert.ok(process.env.TEST_DATA_LOG_PATH)
 
-  const writeLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_WRITE_LOG_PATH)
+  const operationLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_OPERATION_LOG_PATH)
+  const testDataLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.TEST_DATA_LOG_PATH)
+
+  await fsp.mkdir(path.dirname(operationLogPath), { recursive: true })
+  await fsp.mkdir(path.dirname(testDataLogPath), { recursive: true })
 
   await runCommand('npm', ['run', 'model-schema', 'seed'])
 
-  await fsp.rm(writeLogPath)
+  if (fs.existsSync(operationLogPath)) {
+    await fsp.rm(operationLogPath)
+  }
 }
 
 export default globalSetup

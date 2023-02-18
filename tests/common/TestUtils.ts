@@ -12,32 +12,45 @@ export const expect = baseExpect
 const testDataApi = wretch(`${process.env.INTERNAL_APP_BASE_URL}/api/__test/data`)
 
 type CustomFixtures = Readonly<{
-  resetDatabase: void
+  testData: void
 }>
 
 export const test = baseTest.extend<CustomFixtures>({
-  resetDatabase: [
+  testData: [
     // eslint-disable-next-line no-empty-pattern
-    async ({}, use) => {
+    async ({}, use, testInfo) => {
       assert.ok(process.env.LOCAL_WORKSPACE_PATH)
-      assert.ok(process.env.DATABASE_WRITE_LOG_PATH)
+      assert.ok(process.env.DATABASE_OPERATION_LOG_PATH)
+      assert.ok(process.env.TEST_DATA_LOG_PATH)
 
-      const writeLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_WRITE_LOG_PATH)
+      const operationLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_OPERATION_LOG_PATH)
+      const hasOperationLog = fs.existsSync(operationLogPath)
+      const operations = hasOperationLog
+        ? (await fsp.readFile(operationLogPath, 'utf-8')).split(/\r?\n/).filter(Boolean)
+        : []
 
-      const isDatabaseDirty = fs.existsSync(writeLogPath)
+      const writeOperationCount = operations.filter((operation) => getOperationType(operation) === 'write').length
+      const readOperationCount = operations.length - writeOperationCount
+      const isDatabaseDirty = writeOperationCount > 0
 
       if (isDatabaseDirty) {
-        console.log()
-        console.log('Resetting test data...')
-        console.log()
-
         await testDataApi.post({}, '/seed').res()
+      }
 
-        await fsp.rm(writeLogPath)
-      } else {
-        console.log()
-        console.log('No write operation, can reuse current data')
-        console.log()
+      const testDataLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.TEST_DATA_LOG_PATH)
+      const operationSummary = `${readOperationCount} reads, ${writeOperationCount} writes`
+      const testName = testInfo.titlePath.slice(1).join(' > ')
+      const message = [
+        '',
+        ...operations.map((operation) => `${operation} => ${getOperationType(operation)}`),
+        `${operationSummary} => ${isDatabaseDirty ? 'reset' : 'reuse'} => ${testName}`,
+        '',
+      ].join('\n')
+
+      await fsp.appendFile(testDataLogPath, message)
+
+      if (hasOperationLog) {
+        await fsp.rm(operationLogPath)
       }
 
       await use()
@@ -45,6 +58,12 @@ export const test = baseTest.extend<CustomFixtures>({
     { auto: true },
   ],
 })
+
+const DB_WRITE_OPERATION_PREFIXES = ['create', 'update', 'delete', 'upsert']
+
+const getOperationType = (operation: string): 'read' | 'write' => {
+  return DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.includes(`.${prefix}`)) ? 'write' : 'read'
+}
 
 export const queryTestData = async (model: string, where?: object): Promise<object[]> => {
   const data = await testDataApi.post({ model, where }, '/query').json<object[]>()

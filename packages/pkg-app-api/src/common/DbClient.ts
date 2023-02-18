@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
 
@@ -31,17 +30,13 @@ const getLogConfig = (): LogConfig => {
   ]
 }
 
-const DB_WRITE_OPERATION_PREFIXES = ['create', 'update', 'delete', 'upsert']
+const logOperation = async (model: string, operation: string, logPath: string) => {
+  try {
+    await fsp.appendFile(logPath, `${model}.${operation}\n`)
+  } catch (err) {
+    console.log(err)
 
-const logWriteOperation = async (model: string, operation: string, outputPath: string) => {
-  if (DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.startsWith(prefix))) {
-    try {
-      await fsp.appendFile(outputPath, `${model}.${operation}\n`)
-    } catch (err) {
-      console.log(err)
-
-      throw err
-    }
+    throw err
   }
 }
 
@@ -72,18 +67,17 @@ const createPrismaClient = (): ConfiguredPrismaClient => {
     logger.error(logEvent.message)
   })
 
-  if (process.env.DATABASE_WRITE_LOG_PATH) {
+  if (process.env.DATABASE_OPERATION_LOG_PATH) {
     assertDefined(process.env.LOCAL_WORKSPACE_PATH, 'LOCAL_WORKSPACE_PATH')
 
-    const writeLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_WRITE_LOG_PATH)
-    console.log(`Use writeLogPath=${writeLogPath}`)
-    fs.mkdirSync(path.dirname(writeLogPath), { recursive: true })
+    const operationLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_OPERATION_LOG_PATH)
+    console.log(`Logging operations to ${operationLogPath}...`)
 
     return baseClient.$extends({
       query: {
         $allModels: {
           $allOperations: async ({ model, operation, args, query }) => {
-            await logWriteOperation(model, operation, writeLogPath)
+            await logOperation(model, operation, operationLogPath)
 
             return query(args)
           },
