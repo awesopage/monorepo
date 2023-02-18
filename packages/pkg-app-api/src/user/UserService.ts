@@ -42,7 +42,11 @@ export type AssignUserRolesOptions = Readonly<{
 export const assignUserRoles = async (dbClient: DbClient, options: AssignUserRolesOptions): Promise<User> => {
   const { email, roles, assignedByUser } = options
 
-  if (assignedByUser.email !== process.env.APP_ROLE_ADMIN_EMAIL) {
+  if (roles.includes('ADMIN')) {
+    if (assignedByUser.email !== process.env.APP_ROLE_ADMIN_EMAIL) {
+      throw new Error(`${assignedByUser.email} cannot assign ADMIN role`)
+    }
+  } else {
     requireRole(assignedByUser, 'ADMIN')
   }
 

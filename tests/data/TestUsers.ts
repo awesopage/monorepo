@@ -50,12 +50,12 @@ export const createTestUsers = async () => {
 
     assertDefined(process.env.APP_ROLE_ADMIN_EMAIL, 'APP_ROLE_ADMIN_EMAIL')
 
-    const roleAdmin = await findUserByEmail(dbClient, process.env.APP_ROLE_ADMIN_EMAIL)
-
     for (const testUser of testUsers) {
       const { email, roles } = testUser
 
       if (roles) {
+        const roleAdmin = await findUserByEmail(dbClient, process.env.APP_ROLE_ADMIN_EMAIL)
+
         await assignUserRoles(dbClient, { email, roles, assignedByUser: roleAdmin })
       }
     }
