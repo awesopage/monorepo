@@ -1,7 +1,7 @@
 tasks:
   - name: chore
     before: >
-      gp sync-await boot &&
+      gp sync-await install &&
       nvm use default &&
       pnpm install-tools
     command: pnpm lint
@@ -11,10 +11,9 @@ tasks:
       nvm install 18 &&
       nvm alias default 18 &&
       echo "nvm use default" >> ~/.bashrc.d/51-nvm-fix &&
-      pnpm boot &&
-      gp sync-done boot &&
-      node ./scripts/workspace.js prepare-gitpod &&
-      pnpm local-services start
+      pnpm install &&
+      gp sync-done install &&
+      pnpm boot
     command: pnpm dev
 
 ports:

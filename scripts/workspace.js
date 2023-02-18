@@ -17,24 +17,30 @@ const setEnv = (envLines, key, value) => {
   }
 }
 
-const setGitpodEnv = async (envPath) => {
+const setLocalEnv = async (envPath) => {
   const envLines = fs.existsSync(envPath) ? (await fsp.readFile(envPath, 'utf-8')).split(/\r?\n/) : []
 
-  const gitpodUrlSuffix = `${process.env.GITPOD_WORKSPACE_ID}.${process.env.GITPOD_WORKSPACE_CLUSTER_HOST}`
-
-  setEnv(envLines, 'NEXT_PUBLIC_APP_BASE_URL', `https://4000-${gitpodUrlSuffix}`)
   setEnv(envLines, 'LOCAL_WORKSPACE_PATH', fileURLToPath(new URL('..', import.meta.url)))
+
+  if (process.env.GITPOD_WORKSPACE_ID) {
+    const gitpodUrlSuffix = `${process.env.GITPOD_WORKSPACE_ID}.${process.env.GITPOD_WORKSPACE_CLUSTER_HOST}`
+
+    setEnv(envLines, 'NEXT_PUBLIC_APP_BASE_URL', `https://4000-${gitpodUrlSuffix}`)
+  }
 
   await fsp.writeFile(envPath, envLines.join('\n'))
 }
 
 const taskById = {
-  'prepare-gitpod': async () => {
-    await cpy('.gitpod/vscode-settings.json', '.vscode', { flat: true, rename: 'settings.json' })
+  boot: async () => {
     await cpy('config/.env.development', 'config', { flat: true, rename: '.env.production.local' })
 
-    await setGitpodEnv(new URL('../config/.env.development.local', import.meta.url))
-    await setGitpodEnv(new URL('../config/.env.production.local', import.meta.url))
+    if (process.env.GITPOD_WORKSPACE_ID) {
+      await cpy('.gitpod/vscode-settings.json', '.vscode', { flat: true, rename: 'settings.json' })
+    }
+
+    await setLocalEnv(new URL('../config/.env.development.local', import.meta.url))
+    await setLocalEnv(new URL('../config/.env.production.local', import.meta.url))
   },
 }
 

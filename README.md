@@ -12,16 +12,13 @@
 
 ## Development
 
-Create a file `config/.env.development.local` then populate the following values:
-
-- `LOCAL_WORKSPACE_PATH`: the checkout path of this repository.
-
-### Install dependencies
+### Set up environment
 
 - Install Node.js v18.
 - Install pnpm v7 https://pnpm.io/installation.
-- Run `pnpm boot` to install all dependencies of packages.
+- Run `pnpm install` to install all dependencies.
 - Run `pnpm install-tools` to install additional development tools.
+- Run `pnpm boot` to bootstrap the environment.
 
 ### Manage local services (Docker Compose)
 

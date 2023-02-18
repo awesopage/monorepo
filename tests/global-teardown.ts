@@ -1,6 +1,8 @@
 import 'scripts/lib/dotenv-loader.js'
 
+import assert from 'node:assert'
 import fsp from 'node:fs/promises'
+import path from 'node:path'
 
 import killPort from 'kill-port'
 import wretch from 'wretch'
@@ -12,11 +14,13 @@ const globalTeardown = async () => {
   console.log('Collecting api coverage...')
   console.log()
 
-  const coverageJSON = await wretch(process.env.INTERNAL_APP_BASE_URL).post({}, '/api/__test/coverage').text()
+  const apiCoverageJSON = await wretch(process.env.INTERNAL_APP_BASE_URL).post({}, '/api/__test/coverage').text()
 
-  const outputDirPath = new URL('../output/test/coverage/tmp/', import.meta.url)
-  await fsp.mkdir(outputDirPath, { recursive: true })
-  await fsp.writeFile(new URL('./api_coverage.json', outputDirPath), coverageJSON)
+  assert.ok(process.env.LOCAL_WORKSPACE_PATH)
+
+  const apiCoveragePath = path.join(process.env.LOCAL_WORKSPACE_PATH, 'output/test/coverage/tmp/api_coverage.json')
+  await fsp.mkdir(path.dirname(apiCoveragePath), { recursive: true })
+  await fsp.writeFile(apiCoveragePath, apiCoverageJSON)
 
   if (process.env.STOP_APP_ON_EXIT) {
     console.log()

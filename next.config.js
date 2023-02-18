@@ -1,4 +1,6 @@
+import assert from 'node:assert'
 import fsp from 'node:fs/promises'
+import path from 'node:path'
 
 import bundleAnalyzer from '@next/bundle-analyzer'
 
@@ -9,7 +11,11 @@ const withBundleAnalyzer = bundleAnalyzer({
   openAnalyzer: false,
 })
 
-const workspacePackages = JSON.parse(await fsp.readFile(new URL('./workspace-packages.json', import.meta.url), 'utf-8'))
+assert.ok(process.env.LOCAL_WORKSPACE_PATH)
+
+const workspacePackages = JSON.parse(
+  await fsp.readFile(path.join(process.env.LOCAL_WORKSPACE_PATH, 'workspace-packages.json'), 'utf-8'),
+)
 const configFiles = ['next.config.js', '.eslintrc.cjs', 'nyc.config.cjs', 'playwright.config.ts']
 
 /**

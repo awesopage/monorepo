@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'node:url'
+import assert from 'node:assert'
 
 import spawn from 'cross-spawn'
 
@@ -31,8 +31,10 @@ export const runCommand = async (command, argv, options = {}) => {
 }
 
 const createChildProcess = (command, argv, options) => {
+  assert.ok(process.env.LOCAL_WORKSPACE_PATH)
+
   return spawn(command, argv, {
-    cwd: fileURLToPath(new URL('../..', import.meta.url)),
+    cwd: process.env.LOCAL_WORKSPACE_PATH,
     stdio: [process.stdin, process.stdout, process.stderr],
     env: { ...process.env, ...(options.env ?? {}) },
   })
