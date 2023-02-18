@@ -5,9 +5,34 @@ import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
 
+import { chromium } from '@playwright/test'
 import wretch from 'wretch'
 
 import { runCommand, waitFor } from 'scripts/lib/script-utils'
+
+const TEST_USER_NAMES = ['admin1', 'admin2', 'reviewer1', 'reviewer2', 'user1', 'user2']
+
+const collectAuthStates = async () => {
+  console.log()
+  console.log(`Collecting auth states for ${TEST_USER_NAMES.length} users...`)
+  console.log()
+
+  const browser = await chromium.launch()
+
+  for (const testUserName of TEST_USER_NAMES) {
+    const page = await browser.newPage()
+
+    await page.request.post(`${process.env.INTERNAL_APP_BASE_URL}/api/__test/auth`, {
+      data: {
+        email: `${testUserName}@example.com`,
+      },
+    })
+
+    await page.context().storageState({ path: `output/test/playwright/setup/${testUserName}-auth-state.json` })
+  }
+
+  await browser.close()
+}
 
 const globalSetup = async () => {
   await waitFor('Waiting for application to be ready...', 5, async () => {
@@ -35,6 +60,8 @@ const globalSetup = async () => {
   if (fs.existsSync(operationLogPath)) {
     await fsp.rm(operationLogPath)
   }
+
+  await collectAuthStates()
 }
 
 export default globalSetup

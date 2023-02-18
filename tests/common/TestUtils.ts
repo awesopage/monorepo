@@ -70,3 +70,9 @@ export const queryTestData = async (model: string, where?: object): Promise<obje
 
   return data
 }
+
+export const useTestUser = (userName: string) => {
+  test.use({
+    storageState: `output/test/playwright/setup/${userName}-auth-state.json`,
+  })
+}
