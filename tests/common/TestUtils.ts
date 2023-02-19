@@ -41,8 +41,8 @@ export const test = baseTest.extend<CustomFixtures>({
       const operationSummary = `${readOperationCount} reads, ${writeOperationCount} writes`
       const testName = testInfo.titlePath.slice(1).join(' > ')
       const message = [
-        '',
         ...operations.map((operation) => `${operation} => ${getOperationType(operation)}`),
+        '',
         `${operationSummary} => ${isDatabaseDirty ? 'reset' : 'reuse'} => ${testName}`,
         '',
       ].join('\n')
