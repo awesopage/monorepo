@@ -21,7 +21,7 @@ declare module 'iron-session' {
 
 export const checkSignedIn = () => {
   return async (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
-    const reqWithUser = req as NextApiRequest & { user?: User }
+    const reqWithUser = req as NextApiRequest & { currentUser?: User }
     const { email } = reqWithUser.session
 
     if (!email) {
@@ -34,20 +34,20 @@ export const checkSignedIn = () => {
       return findUserByEmail(dbClient, email)
     })
 
-    reqWithUser.user = user
+    reqWithUser.currentUser = user
 
     return next()
   }
 }
 
-export const requireUser = (req: NextApiRequest): User => {
-  const { user } = req as NextApiRequest & { user?: User }
+export const requireCurrentUser = (req: NextApiRequest): User => {
+  const { currentUser } = req as NextApiRequest & { currentUser: User }
 
-  if (!user) {
+  if (!currentUser) {
     throw new Error('Request does not have user')
   }
 
-  return user
+  return currentUser
 }
 
 export const createApiRouter = () => {

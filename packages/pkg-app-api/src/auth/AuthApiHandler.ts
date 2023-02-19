@@ -17,11 +17,11 @@ export const authMeApiHandler: NextApiHandler = createApiRouter()
 
       assertDefined(email, 'email')
 
-      const user: User = await prismaClient.$transaction((dbClient) => {
+      const currentUser: User = await prismaClient.$transaction((dbClient) => {
         return findUserByEmail(dbClient, email)
       })
 
-      sendApiResponse(res, { user: mapUserToDTO(user) })
+      sendApiResponse(res, { user: mapUserToDTO(currentUser) })
     } catch {
       sendApiResponse(res, {})
     }

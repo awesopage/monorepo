@@ -5,6 +5,7 @@ import { sendApiResponse } from 'pkg-app-api/src/router/ApiResponse'
 import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
 import { mapUserToDTO } from 'pkg-app-api/src/user/UserMapper'
 import { findOrCreateUser } from 'pkg-app-api/src/user/UserService'
+import type { User } from 'pkg-app-model/client'
 import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
 
 const testAuthApiHandler: NextApiHandler = createApiRouter()
@@ -14,7 +15,7 @@ const testAuthApiHandler: NextApiHandler = createApiRouter()
       displayName?: string
     }>
 
-    const user = await prismaClient.$transaction((dbClient) => {
+    const user: User = await prismaClient.$transaction((dbClient) => {
       return findOrCreateUser(dbClient, { email, displayName })
     })
 
