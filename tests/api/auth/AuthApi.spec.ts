@@ -3,6 +3,10 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import { expect, test, useTestUser } from 'tests/common/TestUtils'
 
+const getAuthMeResponse = async (request: APIRequestContext): Promise<APIResponse> => {
+  return request.get('/api/auth/me')
+}
+
 test.describe('given signed in', () => {
   useTestUser('user1')
 
@@ -29,7 +33,3 @@ test.describe('given not signed in', () => {
     })
   })
 })
-
-const getAuthMeResponse = async (request: APIRequestContext): Promise<APIResponse> => {
-  return request.get('/api/auth/me')
-}

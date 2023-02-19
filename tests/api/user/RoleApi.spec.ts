@@ -9,6 +9,13 @@ import { expect, queryTestData, test, useTestUser } from 'tests/common/TestUtils
 const ROLE_ADMIN_USER = 'admin1'
 const NON_ROLE_ADMIN_USER = 'admin2'
 
+const getAssignUserRolesResponse = async (
+  request: APIRequestContext,
+  options: AssignUserRolesOptionsDTO,
+): Promise<APIResponse> => {
+  return request.post('/api/roles', { data: options })
+}
+
 test.describe('given signed in as role-admin', () => {
   useTestUser(ROLE_ADMIN_USER)
 
@@ -99,13 +106,6 @@ test.describe('given not signed in', () => {
     })
   })
 })
-
-const getAssignUserRolesResponse = async (
-  request: APIRequestContext,
-  options: AssignUserRolesOptionsDTO,
-): Promise<APIResponse> => {
-  return request.post('/api/roles', { data: options })
-}
 
 const getCurrentRoles = async (email: string): Promise<RoleEnum[]> => {
   const users = (await queryTestData('user', { email })) as User[]
