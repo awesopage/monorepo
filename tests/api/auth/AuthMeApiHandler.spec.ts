@@ -1,7 +1,7 @@
 import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import { expect, test, useTestUser } from 'tests/common/TestUtils'
 
-test.describe('AuthMeApiHandler', () => {
+test.describe('authMeApiHandler', () => {
   test.describe('given signed in', () => {
     useTestUser('user1')
 
