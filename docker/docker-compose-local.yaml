@@ -1,6 +1,6 @@
 services:
   database:
-    image: cockroachdb/cockroach:v22.2.3
+    image: cockroachdb/cockroach:v22.2.5
     restart: always
     command: ['start-single-node', '--insecure']
     volumes:
