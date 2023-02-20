@@ -35,6 +35,15 @@ jobs:
       - run:
           name: Run tests
           command: pnpm test
+      - store_artifacts:
+          path: ./output/test/playwright/html
+          destination: playwright-html
+      - store_artifacts:
+          path: ./output/test/playwright/logs
+          destination: playwright-logs
+      - store_artifacts:
+          path: ./output/test/coverage/report
+          destination: coverage-report
       - store_test_results:
           path: ./output/test/playwright/junit.xml
       - run:
