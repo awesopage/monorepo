@@ -4,6 +4,10 @@
 
 # Awesopage
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/awesopage/monorepo/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/awesopage/monorepo/tree/develop)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6ff90b49c21c344b6df0/test_coverage)](https://codeclimate.com/github/awesopage/monorepo/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6ff90b49c21c344b6df0/maintainability)](https://codeclimate.com/github/awesopage/monorepo/maintainability)
+
 ## Tech stack
 
 - [Next.js](https://nextjs.org)
