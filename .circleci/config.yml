@@ -37,7 +37,7 @@ jobs:
           command: pnpm test
       - store_artifacts:
           path: ./output/test/playwright/html
-          destination: playwright-html
+          destination: playwright-report
       - store_artifacts:
           path: ./output/test/playwright/logs
           destination: playwright-logs
