@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "boot": "pnpm list --depth -1 --recursive --json > workspace-packages.json && node ./scripts/workspace.js boot && pnpm local-services start",
+    "boot": "pnpm list --depth -1 --recursive --json > workspace-packages.json && node ./scripts/workspace.js boot && npm run model-schema generate",
     "install-tools": "playwright install-deps && playwright install",
     "build": "del-cli output/production && cross-env NODE_ENV=production next build",
     "build-check": "del-cli output/production && cross-env NODE_ENV=production ANALYZE=true next build",

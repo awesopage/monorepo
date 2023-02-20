@@ -13,7 +13,8 @@ tasks:
       echo "nvm use default" >> ~/.bashrc.d/51-nvm-fix &&
       pnpm install &&
       gp sync-done install &&
-      pnpm boot
+      pnpm boot &&
+      pnpm local-services start
     command: pnpm dev
 
 ports:
