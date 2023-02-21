@@ -18,6 +18,7 @@
     "dev": "npm run compile && kill-port 4000 && cross-env NODE_ENV=development next dev -p 4000",
     "local-services": "tsx ./scripts/local-services.ts",
     "model-schema": "tsx ./scripts/model-schema.ts",
+    "seed": "tsx ./scripts/reset-test-data.ts",
     "serve": "http-server -p 4444"
   },
   "engines": {

@@ -3,7 +3,8 @@ tasks:
     before: >
       gp sync-await install &&
       nvm use default &&
-      pnpm install-tools
+      pnpm install-tools &&
+      pnpm seed
     command: pnpm lint
   - name: app
     # Based on https://www.gitpod.io/docs/introduction/languages/javascript#node-versions

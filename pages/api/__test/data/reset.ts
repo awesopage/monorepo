@@ -4,7 +4,7 @@ import { sendApiResponse } from 'pkg-app-api/src/router/ApiResponse'
 import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
 import { testDataManager } from 'tests/data/TestDataManager'
 
-const testDataSeedApiHandler: NextApiHandler = createApiRouter()
+const testDataResetApiHandler: NextApiHandler = createApiRouter()
   .post(async (req, res) => {
     await testDataManager.reset()
 
@@ -12,4 +12,4 @@ const testDataSeedApiHandler: NextApiHandler = createApiRouter()
   })
   .handler()
 
-export default testDataSeedApiHandler
+export default testDataResetApiHandler

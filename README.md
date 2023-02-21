@@ -39,7 +39,6 @@
 - To sync or create Prisma migrations, run `pnpm model-schema migrate`.
 - To reset data including migrations, run `pnpm model-schema reset`.
 - To generate Prisma client, run `pnpm model-schema generate`.
-- To create or reset test data, run `pnpm model-schema seed` (after starting the application).
 
 ### Start development
 
@@ -47,7 +46,8 @@
 pnpm dev
 ```
 
-The application will be at http://localhost:4000.
+- The application will be at http://localhost:4000.
+- To create or reset test data, run `pnpm seed`.
 
 ### Run tests
 

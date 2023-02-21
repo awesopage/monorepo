@@ -34,7 +34,7 @@ export const test = baseTest.extend<CustomFixtures>({
       const isDatabaseDirty = writeOperationCount > 0
 
       if (isDatabaseDirty) {
-        await testDataApi.post({}, '/seed').res()
+        await testDataApi.post({}, '/reset').res()
       }
 
       const testDataLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.TEST_DATA_LOG_PATH)

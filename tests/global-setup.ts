@@ -53,7 +53,7 @@ const globalSetup = async () => {
   await fsp.mkdir(path.dirname(operationLogPath), { recursive: true })
   await fsp.mkdir(path.dirname(testDataLogPath), { recursive: true })
 
-  await runCommand('npm', ['run', 'model-schema', 'seed'])
+  await runCommand('npm', ['run', 'seed'])
 
   await collectAuthStates()
 
