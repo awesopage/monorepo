@@ -9,7 +9,7 @@ const taskById: Record<string, () => Promise<void>> = {
   start: async () => {
     await runCommand(dockerCommand, [...composeArgv, 'up', '--detach'])
 
-    await runCommand('npm', ['run', 'model-schema', 'migrate'])
+    await runCommand('npm', ['run', 'model-schema', 'deploy'])
   },
   stop: async () => {
     await runCommand(dockerCommand, [...composeArgv, 'down'])
