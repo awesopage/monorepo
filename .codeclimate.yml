@@ -12,7 +12,7 @@ checks:
 
 exclude_patterns:
   - "**/*"
-  - "**/.*"
-  - "**/*.d.ts"
+  - "**/.*"  
   - "!packages/pkg-*/src/**"
   - "packages/pkg-app-shared/**"
+  - "**/*.d.ts"

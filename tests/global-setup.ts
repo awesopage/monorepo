@@ -6,9 +6,8 @@ import fsp from 'node:fs/promises'
 import path from 'node:path'
 
 import { request } from '@playwright/test'
-import wretch from 'wretch'
 
-import { runCommand, waitFor } from 'scripts/lib/script-utils'
+import { runCommand } from 'scripts/lib/script-utils'
 
 // All user names from tests/data/TestUsers.ts
 const TEST_USER_NAMES = ['admin1', 'admin2', 'reviewer1', 'reviewer2', 'user1', 'user2']
@@ -33,16 +32,6 @@ const collectAuthStates = async () => {
 }
 
 const globalSetup = async () => {
-  await waitFor('Waiting for application to be ready...', 5, async () => {
-    await wretch(process.env.INTERNAL_APP_BASE_URL).get('/api/server/health').res()
-
-    return true
-  })
-
-  console.log()
-  console.log('Creating test data...')
-  console.log()
-
   assert.ok(process.env.LOCAL_WORKSPACE_PATH)
   assert.ok(process.env.DATABASE_OPERATION_LOG_PATH)
   assert.ok(process.env.TEST_DATA_LOG_PATH)
@@ -52,6 +41,10 @@ const globalSetup = async () => {
 
   await fsp.mkdir(path.dirname(operationLogPath), { recursive: true })
   await fsp.mkdir(path.dirname(testDataLogPath), { recursive: true })
+
+  console.log()
+  console.log('Creating test data...')
+  console.log()
 
   await runCommand('npm', ['run', 'seed'])
 
