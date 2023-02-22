@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "list_status" AS ENUM ('PENDING', 'ACTIVE', 'INACTIVE');
+CREATE TYPE "list_status" AS ENUM ('ACTIVE', 'INACTIVE');
 
 -- CreateEnum
 CREATE TYPE "resource_type" AS ENUM ('CODE', 'VIDEO', 'WEBSITE');
@@ -16,6 +16,7 @@ CREATE TABLE "list" (
     "requested_at" TIMESTAMP(3) NOT NULL,
     "requested_by_id" INT8 NOT NULL,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "isApproved" BOOL NOT NULL,
     "approved_by_id" INT8,
 
     CONSTRAINT "list_pkey" PRIMARY KEY ("id")

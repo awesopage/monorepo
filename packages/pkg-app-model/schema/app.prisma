@@ -32,7 +32,6 @@ model User {
 }
 
 enum ListStatusEnum {
-  PENDING
   ACTIVE
   INACTIVE
 
@@ -50,6 +49,7 @@ model List {
   requestedAt DateTime @map("requested_at")
   requestedById BigInt @map("requested_by_id")
   updatedAt DateTime @map("updated_at")
+  isApproved Boolean
   approvedById BigInt? @map("approved_by_id")
 
   requestedBy User @relation("requested_lists", fields: [requestedById], references: [id])
