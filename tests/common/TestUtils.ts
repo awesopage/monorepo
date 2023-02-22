@@ -33,8 +33,6 @@ export const test = baseTest.extend<CustomFixtures>({
       const isDatabaseDirty = writeOperationCount > 0
 
       if (isDatabaseDirty) {
-        // Do not call resetTestData() of TestDataManager directly due to
-        // Playwright resolves ESM imports differently
         await testDataApi.post({}, '/reset').res()
       }
 
