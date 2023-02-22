@@ -1,9 +1,8 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test'
 
-import type { RoleEnum, User } from 'pkg-app-model/client'
 import type { AssignUserRolesOptionsDTO } from 'pkg-app-shared/src/user/RoleApiOptions'
-import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
-import { expect, queryTestData, test, useTestUser } from 'tests/common/TestUtils'
+import type { Role, UserDTO } from 'pkg-app-shared/src/user/UserDTO'
+import { expect, test, testDataApi, useTestUser } from 'tests/common/TestUtils'
 
 // APP_ROLE_ADMIN_EMAIL is set to admin1
 const ROLE_ADMIN_USER = 'admin1'
@@ -107,8 +106,8 @@ test.describe('given not signed in', () => {
   })
 })
 
-const getCurrentRoles = async (email: string): Promise<RoleEnum[]> => {
-  const users = (await queryTestData('user', { email })) as User[]
+const getCurrentRoles = async (email: string): Promise<Role[]> => {
+  const users = await testDataApi.post({ email }, '/users').json<UserDTO[]>()
 
   return users[0]?.roles ?? []
 }

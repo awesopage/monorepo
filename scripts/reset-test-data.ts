@@ -4,6 +4,7 @@ import wretch from 'wretch'
 
 import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 import { waitFor } from 'scripts/lib/script-utils'
+import { testDataApi } from 'tests/common/TestUtils'
 
 const resetTestData = async () => {
   await waitFor('Waiting for application to be ready...', 5, async () => {
@@ -12,7 +13,7 @@ const resetTestData = async () => {
     return true
   })
 
-  await wretch(process.env.INTERNAL_APP_BASE_URL).post({}, '/api/__test/data/reset').res()
+  await testDataApi.post({}, '/reset').res()
 }
 
 if (isMainModule(import.meta.url)) {

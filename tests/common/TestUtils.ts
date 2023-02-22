@@ -8,8 +8,7 @@ import wretch from 'wretch'
 
 export const expect = baseExpect
 
-// Do not call TestDataManager directly due to Playwright resolves ESM imports differently
-const testDataApi = wretch(`${process.env.INTERNAL_APP_BASE_URL}/api/__test/data`)
+export const testDataApi = wretch(`${process.env.INTERNAL_APP_BASE_URL}/api/__test/data`)
 
 type CustomFixtures = Readonly<{
   testData: void
@@ -34,6 +33,8 @@ export const test = baseTest.extend<CustomFixtures>({
       const isDatabaseDirty = writeOperationCount > 0
 
       if (isDatabaseDirty) {
+        // Do not call resetTestData() of TestDataManager directly due to
+        // Playwright resolves ESM imports differently
         await testDataApi.post({}, '/reset').res()
       }
 
@@ -63,12 +64,6 @@ const DB_WRITE_OPERATION_PREFIXES = ['create', 'update', 'delete', 'upsert']
 
 const getOperationType = (operation: string): 'read' | 'write' => {
   return DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.includes(`.${prefix}`)) ? 'write' : 'read'
-}
-
-export const queryTestData = async (model: string, where?: object): Promise<object[]> => {
-  const data = await testDataApi.post({ model, where }, '/query').json<object[]>()
-
-  return data
 }
 
 export const useTestUser = (userName: string) => {
