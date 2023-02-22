@@ -37,6 +37,7 @@
 
 - Prisma schema is defined in `packages/pkg-app-model/schema/app.prisma`.
 - To sync or create Prisma migrations, run `pnpm model-schema migrate`.
+- To deploy Prisma migrations, run `pnpm model-schema deploy`.
 - To reset data including migrations, run `pnpm model-schema reset`.
 - To generate Prisma client, run `pnpm model-schema generate`.
 
