@@ -5,7 +5,7 @@ module.exports = {
   cache: false,
   all: true,
   include: ['packages/pkg-*/src/**'],
-  exclude: ['packages/pkg-app-shared/**'],
+  exclude: ['packages/pkg-app-shared/**', '**/*.d.ts'],
   'temp-dir': './output/test/coverage/tmp',
   'report-dir': './output/test/coverage/report',
   reporter: ['text-summary', 'html', 'lcov'],
