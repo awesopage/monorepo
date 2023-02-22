@@ -1,13 +1,23 @@
 import 'scripts/lib/dotenv-loader.js'
 
+import wretch from 'wretch'
+
 import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
-import { runCommand } from 'scripts/lib/script-utils'
+import { runCommand, waitFor } from 'scripts/lib/script-utils'
 
 const prismaCommand = './node_modules/.bin/prisma'
 const prismaArgv = ['--schema=packages/pkg-app-model/schema/app.prisma']
 
 const taskById: Record<string, () => Promise<void>> = {
   migrate: async () => {
+    await waitFor('Waiting for database to be ready...', 5, async () => {
+      await wretch(`http://localhost:${process.env.DATABASE_CONSOLE_PORT ?? 4920}`)
+        .get('/health?ready=1')
+        .res()
+
+      return true
+    })
+
     await runCommand(prismaCommand, ['migrate', 'dev', ...prismaArgv])
   },
   reset: async () => {
