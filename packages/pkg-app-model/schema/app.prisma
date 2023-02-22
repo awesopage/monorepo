@@ -25,5 +25,71 @@ model User {
   createdAt DateTime @map("created_at")
   updatedAt DateTime @map("updated_at")
 
+  requestedLists List[] @relation("requested_lists")
+  approvedLists List[] @relation("approved_lists")
+
   @@map("app_user")
+}
+
+enum ListStatusEnum {
+  PENDING
+  ACTIVE
+  INACTIVE
+
+  @@map("list_status")
+}
+
+model List {
+  id BigInt @id @default(autoincrement())
+  owner String
+  repo String
+  status ListStatusEnum
+  description String
+  starCount BigInt @map("star_count")
+  tags String[]
+  requestedAt DateTime @map("requested_at")
+  requestedById BigInt @map("requested_by_id")
+  updatedAt DateTime @map("updated_at")
+  approvedById BigInt? @map("approved_by_id")
+
+  requestedBy User @relation("requested_lists", fields: [requestedById], references: [id])
+  approvedBy User? @relation("approved_lists", fields: [approvedById], references: [id])
+  resourceLinks ResourceLink[]
+
+  @@unique([owner, repo])
+  @@map("list")
+}
+
+enum ResourceTypeEnum {
+  CODE
+  VIDEO
+  WEBSITE
+
+  @@map("resource_type")
+}
+
+model Resource {
+  id BigInt @id @default(autoincrement())
+  url String @unique
+  domain String
+  type ResourceTypeEnum
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+
+  links ResourceLink[]
+
+  @@map("resource")
+}
+
+model ResourceLink {
+  id BigInt @id @default(autoincrement())
+  description String
+  tags String[]
+  resourceId BigInt @map("resource_id")
+  listId BigInt @map("list_id")
+
+  list List @relation(fields: [listId], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id])
+
+  @@map("resource_link")
 }
