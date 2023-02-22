@@ -6,6 +6,7 @@
     "node": "18.x"
   },
   "dependencies": {
+    "@total-typescript/ts-reset": "0.3.7",
     "@tsconfig/node18-strictest-esm": "1.0.1"
   }
 }

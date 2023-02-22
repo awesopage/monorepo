@@ -128,8 +128,10 @@ importers:
 
   packages/pkg-lib-typescript:
     specifiers:
+      '@total-typescript/ts-reset': 0.3.7
       '@tsconfig/node18-strictest-esm': 1.0.1
     dependencies:
+      '@total-typescript/ts-reset': 0.3.7
       '@tsconfig/node18-strictest-esm': 1.0.1
 
 packages:
@@ -891,6 +893,10 @@ packages:
     resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
     dependencies:
       tslib: 2.5.0
+    dev: false
+
+  /@total-typescript/ts-reset/0.3.7:
+    resolution: {integrity: sha512-yXt2BRRVCJVvzWaxac5n0nCXzIrQEBE/MeYlNQ8/Iq7UeelNmm/AdnUAu18ilSS893mbEQ4u6whPt/HvOPc4rw==}
     dev: false
 
   /@tsconfig/node18-strictest-esm/1.0.1:

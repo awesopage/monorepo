@@ -7,8 +7,8 @@
     }
   },
   "include": [
-    "packages/pkg-app-model/client/**/*.ts",
-    "packages/pkg-*/src/**/*.ts",
+    "node_modules/pkg-app-model/client/**/*.ts",
+    "node_modules/pkg-*/src/**/*.ts",
     "src/**/*.ts"
   ],
   "exclude": []
