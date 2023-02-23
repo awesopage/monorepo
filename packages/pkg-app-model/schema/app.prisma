@@ -44,7 +44,7 @@ model List {
   repo String
   status ListStatusEnum
   description String
-  starCount BigInt @map("star_count")
+  repoStarCount BigInt @map("repo_star_count")
   tags String[]
   requestedAt DateTime @map("requested_at")
   requestedById BigInt @map("requested_by_id")

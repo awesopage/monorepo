@@ -11,7 +11,7 @@ CREATE TABLE "list" (
     "repo" STRING NOT NULL,
     "status" "list_status" NOT NULL,
     "description" STRING NOT NULL,
-    "star_count" INT8 NOT NULL,
+    "repo_star_count" INT8 NOT NULL,
     "tags" STRING[],
     "requested_at" TIMESTAMP(3) NOT NULL,
     "requested_by_id" INT8 NOT NULL,
