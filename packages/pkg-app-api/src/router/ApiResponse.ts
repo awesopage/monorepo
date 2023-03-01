@@ -33,3 +33,7 @@ export const sendApiError = (res: NextApiResponse, type: ApiErrorType, err?: Err
 export const sendApiResponse = <T>(res: NextApiResponse<T>, data: T) => {
   res.status(200).json(data)
 }
+
+export const redirectApiResponse = (res: NextApiResponse, url: string, status?: number) => {
+  res.redirect(status ?? 307, url)
+}
