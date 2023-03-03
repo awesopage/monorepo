@@ -3,6 +3,7 @@ import type { NextApiHandler } from 'next'
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { sendApiResponse } from 'pkg-app-api/src/router/ApiResponse'
 import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
+import { createTestLists } from 'tests/data/TestLists'
 import { createTestUsers } from 'tests/data/TestUsers'
 
 const testDataResetApiHandler: NextApiHandler = createApiRouter()
@@ -18,6 +19,7 @@ export default testDataResetApiHandler
 const resetTestData = async () => {
   await truncateAllTables()
   await createTestUsers()
+  await createTestLists()
 }
 
 const truncateAllTables = async (): Promise<string[]> => {

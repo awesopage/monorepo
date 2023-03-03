@@ -1,4 +1,5 @@
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
+import { approveList, createList, setListStatus, updateList } from 'pkg-app-api/src/list/ListService'
 import { findUserByEmail } from 'pkg-app-api/src/user/UserService'
 import type { ListStatusEnum } from 'pkg-app-model/client'
 
@@ -61,16 +62,16 @@ export const createTestLists = async () => {
       const requestedByUser = await findUserByEmail(dbClient, requestedByEmail)
       const approvedByUser = approvedByEmail ? await findUserByEmail(dbClient, approvedByEmail) : undefined
 
-      // TODO await createList(dbClient, { owner, repo, requestedByUser })
+      await createList(dbClient, { owner, repo, requestedByUser })
 
-      // TODO await updateList(dbClient, { owner, repo, description, starCount, tags, updatedByUser: approvedByUser ?? admin1 })
+      await updateList(dbClient, { owner, repo, description, starCount, tags, updatedByUser: approvedByUser ?? admin1 })
 
       if (approvedByUser) {
-        // TODO await approveList(dbClient, { owner, repo, approvedByUser })
+        await approveList(dbClient, { owner, repo, approvedByUser })
       }
 
       if (currentStatus) {
-        // TODO await setListStatus(dbClient, { owner, repo, status: currentStatus, updatedByUser: admin1 })
+        await setListStatus(dbClient, { owner, repo, status: currentStatus, updatedByUser: admin1 })
       }
     }
   })
