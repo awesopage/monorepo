@@ -1,5 +1,4 @@
 import type { DbClient } from 'pkg-app-api/src/common/DbClient'
-import { maybe } from 'pkg-app-api/src/common/DbClient'
 import { requireRole } from 'pkg-app-api/src/user/RoleChecker'
 import type { List, ListStatusEnum, User } from 'pkg-app-model/client'
 
@@ -12,11 +11,9 @@ export interface CreateListOptions {
 export const createList = async (dbClient: DbClient, options: CreateListOptions): Promise<List> => {
   const { owner, repo, requestedByUser } = options
 
-  const existingList = maybe(
-    await dbClient.list.findUnique({
-      where: { owner_repo: { owner, repo } },
-    }),
-  )
+  const existingList = await dbClient.list.findUnique({
+    where: { owner_repo: { owner, repo } },
+  })
 
   if (existingList) {
     throw new Error(`List ${owner}/${repo} already exists`)
@@ -56,9 +53,7 @@ export const updateList = async (dbClient: DbClient, options: UpdateListOptions)
 
   requireRole(updatedByUser, 'REVIEWER')
 
-  await dbClient.list.findUniqueOrThrow({
-    where: { owner_repo: { owner, repo } },
-  })
+  await findListByOwnerAndRepo(dbClient, { owner, repo })
 
   const list = await dbClient.list.update({
     where: { owner_repo: { owner, repo } },
@@ -84,9 +79,7 @@ export const approveList = async (dbClient: DbClient, options: ApproveListOption
 
   requireRole(approvedByUser, 'REVIEWER')
 
-  const existingList = await dbClient.list.findUniqueOrThrow({
-    where: { owner_repo: { owner, repo } },
-  })
+  const existingList = await findListByOwnerAndRepo(dbClient, { owner, repo })
 
   if (approvedByUser.id === existingList.requestedById) {
     throw new Error(`User ${approvedByUser.email} cannot approve their own requested list ${owner}/${repo}`)
@@ -142,12 +135,10 @@ export const setListStatus = async (dbClient: DbClient, options: SetListStatusOp
 
   requireRole(updatedByUser, 'ADMIN')
 
-  const existingList = await dbClient.list.findUniqueOrThrow({
-    where: { owner_repo: { owner, repo } },
-  })
+  const existingList = await findListByOwnerAndRepo(dbClient, { owner, repo })
 
-  if (!existingList.isApproved) {
-    throw new Error(`User cannot set the status of unapproved list ${owner}/${repo}`)
+  if (status !== 'INACTIVE' && !existingList.isApproved) {
+    throw new Error(`Cannot set status ${status} for unapproved list ${owner}/${repo}`)
   }
 
   const list = await dbClient.list.update({

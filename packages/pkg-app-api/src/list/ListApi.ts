@@ -23,7 +23,9 @@ import type { ListDTO } from 'pkg-app-shared/src/list/ListDTO'
 
 export const listsApiHandler: NextApiHandler = createApiRouter()
   .get(async (req, res: NextApiResponse<ListDTO[]>) => {
-    const lists: List[] = await findActiveLists(prismaClient)
+    const lists: List[] = await prismaClient.$transaction((dbClient) => {
+      return findActiveLists(dbClient)
+    })
 
     sendApiResponse(
       res,
