@@ -64,7 +64,7 @@ const getOperationType = (operation: string): 'read' | 'write' => {
   return DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.includes(`.${prefix}`)) ? 'write' : 'read'
 }
 
-export const useTestUser = (userName: string) => {
+export const withTestUser = (userName: string) => {
   test.use({
     storageState: `output/test/playwright/setup/${userName}-auth-state.json`,
   })
