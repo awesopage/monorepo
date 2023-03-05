@@ -3,8 +3,8 @@ import type { NextApiHandler } from 'next'
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { sendApiResponse } from 'pkg-app-api/src/router/ApiResponse'
 import { createApiRouter } from 'pkg-app-api/src/router/ApiRouter'
-import { createTestLists } from 'tests/data/TestLists'
-import { createTestUsers } from 'tests/data/TestUsers'
+import { createTestLists } from 'tests/data/TestListService'
+import { createTestUsers } from 'tests/data/TestUserService'
 
 const testDataResetApiHandler: NextApiHandler = createApiRouter()
   .post(async (req, res) => {

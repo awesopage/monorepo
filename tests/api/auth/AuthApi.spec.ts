@@ -4,7 +4,7 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 import type { AuthInfo } from 'pkg-app-api/src/auth/AuthService'
 import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
-import { expect, test, useTestUser } from 'tests/common/TestUtils'
+import { expect, test, withTestUser } from 'tests/common/TestUtils'
 
 const getAuthCallbackResponse = async (request: APIRequestContext, token: string): Promise<APIResponse> => {
   return request.post(`/api/auth/callback?token=${encodeURIComponent(token)}`)
@@ -17,7 +17,7 @@ const getAuthMeResponse = async (request: APIRequestContext): Promise<APIRespons
 const testReturnUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/welcome`
 
 test.describe('given signed in', () => {
-  useTestUser('user1')
+  withTestUser('user1')
 
   test.describe('when get current user', () => {
     test('should receive correct user', async ({ request }) => {
