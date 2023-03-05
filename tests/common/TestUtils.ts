@@ -58,10 +58,25 @@ export const test = baseTest.extend<CustomFixtures>({
   ],
 })
 
-const DB_WRITE_OPERATION_PREFIXES = ['create', 'update', 'delete', 'upsert']
+const DB_OPERATION_PREFIXES_BY_TYPE = {
+  read: ['find', 'count', 'group', 'aggregate'],
+  write: ['create', 'update', 'delete', 'upsert'],
+}
 
-const getOperationType = (operation: string): 'read' | 'write' => {
-  return DB_WRITE_OPERATION_PREFIXES.some((prefix) => operation.includes(`.${prefix}`)) ? 'write' : 'read'
+type DB_OPERATION_TYPE = keyof typeof DB_OPERATION_PREFIXES_BY_TYPE
+
+const getOperationType = (operation: string): DB_OPERATION_TYPE => {
+  const operationTypes = Object.keys(DB_OPERATION_PREFIXES_BY_TYPE) as DB_OPERATION_TYPE[]
+
+  const operationType = operationTypes.find((operationType) => {
+    return DB_OPERATION_PREFIXES_BY_TYPE[operationType].some((prefix) => operation.includes(`.${prefix}`))
+  })
+
+  if (!operationType) {
+    throw new Error(`Cannot get type of operation ${operation}`)
+  }
+
+  return operationType
 }
 
 export const withTestUser = (userName: string) => {
