@@ -27,25 +27,11 @@ export const updateEnvFile = async (envPath, extraEnvs, placeholderKeys) => {
     setEnv(envLines, key, extraEnvs[key])
   })
 
-  const usedPlaceholderKeys = placeholderKeys.filter((placeholderKey) => {
-    const searchText = getSearchText(placeholderKey)
-
-    return envLines.some((envLine) => !isCommentLine(envLine) && envLine.includes(searchText))
-  })
-
-  const unusedPlaceholderKeys = placeholderKeys.filter(
-    (placeholderKey) => !usedPlaceholderKeys.includes(placeholderKey),
-  )
+  const { usedPlaceholderKeys, unusedPlaceholderKeys } = findPlaceholderKeyUsages(envLines, placeholderKeys)
 
   envLines.push(...unusedPlaceholderKeys.map((placeholderKey) => `# ${placeholderKey}=`))
 
-  const outputLines = envLines.filter((envLine) => {
-    if (isCommentLine(envLine)) {
-      return usedPlaceholderKeys.every((placeholderKey) => !envLine.includes(getSearchText(placeholderKey)))
-    }
-
-    return true
-  })
+  const outputLines = removeUsedPlaceholderKeysInComments(envLines, usedPlaceholderKeys)
 
   await fsp.writeFile(envPath, outputLines.join('\n').replaceAll(PLACEHOLDER_VALUE, ''))
 }
@@ -59,6 +45,30 @@ const setEnv = (envLines, key, value) => {
   } else {
     envLines[index] = getKeyValueText(key, value)
   }
+}
+
+const findPlaceholderKeyUsages = (envLines, placeholderKeys) => {
+  const usedPlaceholderKeys = placeholderKeys.filter((placeholderKey) => {
+    const searchText = getSearchText(placeholderKey)
+
+    return envLines.some((envLine) => !isCommentLine(envLine) && envLine.includes(searchText))
+  })
+
+  const unusedPlaceholderKeys = placeholderKeys.filter(
+    (placeholderKey) => !usedPlaceholderKeys.includes(placeholderKey),
+  )
+
+  return { usedPlaceholderKeys, unusedPlaceholderKeys }
+}
+
+const removeUsedPlaceholderKeysInComments = (envLines, usedPlaceholderKeys) => {
+  return envLines.filter((envLine) => {
+    if (isCommentLine(envLine)) {
+      return usedPlaceholderKeys.every((placeholderKey) => !envLine.includes(getSearchText(placeholderKey)))
+    }
+
+    return true
+  })
 }
 
 const isCommentLine = (line) => {
