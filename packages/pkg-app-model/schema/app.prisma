@@ -27,8 +27,8 @@ model User {
 
   requestedLists List[] @relation("requested_lists")
   approvedLists List[] @relation("approved_lists")
-  listStars ListStar[]
-  resourceStars ResourceStar[]
+  listLikes ListLike[]
+  resourceLikes ResourceLike[]
 
   @@map("app_user")
 }
@@ -46,7 +46,7 @@ model List {
   repo String
   status ListStatusEnum
   description String
-  repoStarCount BigInt @map("repo_star_count")
+  starCount BigInt @map("star_count")
   tags String[]
   requestedAt DateTime @map("requested_at")
   requestedById BigInt @map("requested_by_id")
@@ -57,13 +57,13 @@ model List {
   requestedBy User @relation("requested_lists", fields: [requestedById], references: [id])
   approvedBy User? @relation("approved_lists", fields: [approvedById], references: [id])
   resourceLinks ResourceLink[]
-  stars ListStar[]
+  likes ListLike[]
 
   @@unique([owner, repo])
   @@map("list")
 }
 
-model ListStar {
+model ListLike {
   id BigInt @id @default(autoincrement())
   listId BigInt @map("list_id")
   userId BigInt @map("user_id")
@@ -73,7 +73,7 @@ model ListStar {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([listId, userId])
-  @@map("list_star")
+  @@map("list_like")
 }
 
 enum ResourceTypeEnum {
@@ -93,7 +93,7 @@ model Resource {
   updatedAt DateTime @map("updated_at")
 
   links ResourceLink[]
-  stars ResourceStar[]
+  likes ResourceLike[]
 
   @@map("resource")
 }
@@ -111,7 +111,7 @@ model ResourceLink {
   @@map("resource_link")
 }
 
-model ResourceStar {
+model ResourceLike {
   id BigInt @id @default(autoincrement())
   resourceId BigInt @map("resource_id")
   userId BigInt @map("user_id")
@@ -121,5 +121,5 @@ model ResourceStar {
   user User @relation(fields: [userId], references: [id])
 
   @@unique([resourceId, userId])
-  @@map("resource_star")
+  @@map("resource_like")
 }
