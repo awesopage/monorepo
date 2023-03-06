@@ -1,5 +1,3 @@
-import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
-
 export type ListStatus = 'ACTIVE' | 'INACTIVE'
 
 export type ListDTO = Readonly<{
@@ -11,8 +9,8 @@ export type ListDTO = Readonly<{
   starCount: number
   tags: string[]
   requestedAt: string
-  requestedBy?: UserDTO
+  requestedById: string
   updatedAt: string
   isApproved: boolean
-  approvedBy?: UserDTO
+  approvedById: string
 }>

@@ -2,7 +2,8 @@ import type { NextApiHandler, NextApiResponse } from 'next'
 
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { requireListOwnerAndRepo } from 'pkg-app-api/src/list/ListApiHelper'
-import { mapListToDTO } from 'pkg-app-api/src/list/ListMapper'
+import { mapListDetailsToDTO, mapListToDTO } from 'pkg-app-api/src/list/ListMapper'
+import type { ListDetails } from 'pkg-app-api/src/list/ListService'
 import {
   approveList,
   createList,
@@ -91,9 +92,9 @@ export const listByKeyApiHandler: NextApiHandler = createApiRouter()
   .get(async (req, res: NextApiResponse<ListDTO>) => {
     const { owner, repo } = requireListOwnerAndRepo(req)
 
-    const list: List = await findListByOwnerAndRepo(prismaClient, { owner, repo })
+    const listDetails: ListDetails = await findListByOwnerAndRepo(prismaClient, { owner, repo })
 
-    sendApiResponse(res, mapListToDTO(list))
+    sendApiResponse(res, mapListDetailsToDTO(listDetails))
   })
   .use(checkSignedIn())
   .patch(async (req, res: NextApiResponse<ListDTO>) => {
