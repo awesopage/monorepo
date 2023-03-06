@@ -27,6 +27,8 @@ model User {
 
   requestedLists List[] @relation("requested_lists")
   approvedLists List[] @relation("approved_lists")
+  listLikes ListLike[]
+  resourceLikes ResourceLike[]
 
   @@map("app_user")
 }
@@ -55,9 +57,23 @@ model List {
   requestedBy User @relation("requested_lists", fields: [requestedById], references: [id])
   approvedBy User? @relation("approved_lists", fields: [approvedById], references: [id])
   resourceLinks ResourceLink[]
+  likes ListLike[]
 
   @@unique([owner, repo])
   @@map("list")
+}
+
+model ListLike {
+  id BigInt @id @default(autoincrement())
+  listId BigInt @map("list_id")
+  userId BigInt @map("user_id")
+  createdAt DateTime @map("created_at")
+
+  list List @relation(fields: [listId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([listId, userId])
+  @@map("list_like")
 }
 
 enum ResourceTypeEnum {
@@ -77,6 +93,7 @@ model Resource {
   updatedAt DateTime @map("updated_at")
 
   links ResourceLink[]
+  likes ResourceLike[]
 
   @@map("resource")
 }
@@ -92,4 +109,17 @@ model ResourceLink {
   resource Resource @relation(fields: [resourceId], references: [id])
 
   @@map("resource_link")
+}
+
+model ResourceLike {
+  id BigInt @id @default(autoincrement())
+  resourceId BigInt @map("resource_id")
+  userId BigInt @map("user_id")
+  createdAt DateTime @map("created_at")
+
+  resource Resource @relation(fields: [resourceId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([resourceId, userId])
+  @@map("resource_like")
 }
