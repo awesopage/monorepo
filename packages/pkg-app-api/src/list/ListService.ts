@@ -27,7 +27,7 @@ export const createList = async (dbClient: DbClient, options: CreateListOptions)
       repo,
       status: 'INACTIVE',
       description: '',
-      repoStarCount: 0,
+      starCount: 0,
       tags: [],
       requestedById: requestedByUser.id,
       requestedAt: now,
@@ -59,7 +59,7 @@ export const updateList = async (dbClient: DbClient, options: UpdateListOptions)
     where: { owner_repo: { owner, repo } },
     data: {
       description,
-      repoStarCount: starCount,
+      starCount,
       tags,
       updatedAt: new Date(),
     },

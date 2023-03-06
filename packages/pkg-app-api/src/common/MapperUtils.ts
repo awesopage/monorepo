@@ -6,3 +6,7 @@ export const mapTimestampToString = (timestamp: Date): string => {
 export const mapValueToString = (value: any): string => {
   return `${value}`
 }
+
+export const mapValueToNumber = (value: bigint): number => {
+  return Number(value)
+}
