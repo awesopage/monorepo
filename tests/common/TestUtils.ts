@@ -23,8 +23,7 @@ export const test = baseTest.extend<CustomFixtures>({
       assert.ok(process.env.TEST_DATA_LOG_PATH)
 
       const operationLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_OPERATION_LOG_PATH)
-      const hasOperationLog = fs.existsSync(operationLogPath)
-      const operations = hasOperationLog
+      const operations = fs.existsSync(operationLogPath)
         ? (await fsp.readFile(operationLogPath, 'utf-8')).split(/\r?\n/).filter(Boolean)
         : []
 
@@ -48,7 +47,7 @@ export const test = baseTest.extend<CustomFixtures>({
 
       await fsp.appendFile(testDataLogPath, message)
 
-      if (hasOperationLog) {
+      if (fs.existsSync(operationLogPath)) {
         await fsp.rm(operationLogPath)
       }
 
