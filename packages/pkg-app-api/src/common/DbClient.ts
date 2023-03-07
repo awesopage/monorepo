@@ -30,9 +30,9 @@ const getLogConfig = (): LogConfig => {
   ]
 }
 
-const logOperation = async (model: string, operation: string, logPath: string) => {
+const logOperation = async (model: string | undefined, operation: string, logPath: string) => {
   try {
-    await fsp.appendFile(logPath, `${model}.${operation}\n`)
+    await fsp.appendFile(logPath, `${model ?? 'DB'}.${operation}\n`)
   } catch (err) {
     console.log(err)
 

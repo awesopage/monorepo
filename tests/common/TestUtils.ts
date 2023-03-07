@@ -23,8 +23,7 @@ export const test = baseTest.extend<CustomFixtures>({
       assert.ok(process.env.TEST_DATA_LOG_PATH)
 
       const operationLogPath = path.join(process.env.LOCAL_WORKSPACE_PATH, process.env.DATABASE_OPERATION_LOG_PATH)
-      const hasOperationLog = fs.existsSync(operationLogPath)
-      const operations = hasOperationLog
+      const operations = fs.existsSync(operationLogPath)
         ? (await fsp.readFile(operationLogPath, 'utf-8')).split(/\r?\n/).filter(Boolean)
         : []
 
@@ -48,7 +47,7 @@ export const test = baseTest.extend<CustomFixtures>({
 
       await fsp.appendFile(testDataLogPath, message)
 
-      if (hasOperationLog) {
+      if (fs.existsSync(operationLogPath)) {
         await fsp.rm(operationLogPath)
       }
 
@@ -59,8 +58,8 @@ export const test = baseTest.extend<CustomFixtures>({
 })
 
 const DB_OPERATION_PREFIXES_BY_TYPE = {
-  read: ['find', 'count', 'group', 'aggregate'],
-  write: ['create', 'update', 'delete', 'upsert'],
+  read: ['find', 'count', 'group', 'aggregate', '$queryRaw'],
+  write: ['create', 'update', 'delete', 'upsert', '$executeRaw'],
 }
 
 type DB_OPERATION_TYPE = keyof typeof DB_OPERATION_PREFIXES_BY_TYPE
