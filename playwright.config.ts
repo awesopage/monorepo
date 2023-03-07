@@ -27,6 +27,7 @@ const config: PlaywrightTestConfig = {
   reporter: [
     ['list'],
     ['html', { open: 'never', outputFolder: 'output/test/playwright/html' }],
+    ['json', { outputFile: 'output/test/playwright/logs/summary.json' }],
     ['junit', { outputFile: 'output/test/playwright/junit.xml' }],
   ],
   // eslint-disable-next-line no-null/no-null

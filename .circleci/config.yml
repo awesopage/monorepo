@@ -34,7 +34,8 @@ jobs:
             - node_modules
       - run:
           name: Run tests
-          command: pnpm test
+          # Handle test failure later in "Check test results" step after uploading artifacts
+          command: pnpm test || true
       - store_artifacts:
           path: ./output/test/playwright/html
           destination: playwright-report
@@ -54,6 +55,9 @@ jobs:
             chmod +x ./cc-test-reporter
             ./cc-test-reporter format-coverage -t lcov -o ./output/test/coverage/report/codeclimate.json ./output/test/coverage/report/lcov.info
             ./cc-test-reporter upload-coverage -i ./output/test/coverage/report/codeclimate.json
+      - run:
+          name: Check test results
+          command: pnpm test:check
       - run:
           name: Audit dependencies
           command: pnpm audit --json

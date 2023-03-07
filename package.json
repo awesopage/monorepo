@@ -11,6 +11,7 @@
     "start": "kill-port 4000 && cross-env NODE_ENV=production next start -p 4000",
     "test:start-app": "npm run compile && cross-env NODE_ENV=test npm run local-services start && kill-port 4800 && cross-env NODE_ENV=test nyc next dev -p 4800",
     "test:run": "npm run compile && cross-env NODE_ENV=test playwright test",
+    "test:check": "cross-env NODE_ENV=test tsx ./scripts/test.ts check-results",
     "test": "del-cli output/test && kill-port 4800 && cross-env NODE_ENV=test tsx ./scripts/test.ts run-with-app",
     "clean": "del-cli output tsconfig.tsbuildinfo && pnpm --filter pkg-* run clean && cross-env NODE_ENV=test npm run local-services reset",
     "lint": "cross-env NODE_ENV=development next lint --fix",
