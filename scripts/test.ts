@@ -11,6 +11,46 @@ import { isMainModule, runScript } from 'scripts/lib/script-runner.js'
 import { waitFor } from 'scripts/lib/script-utils'
 import { testDataApi } from 'tests/common/TestUtils'
 
+const getTestStats = (summary: JSONReport) => {
+  const stats = {
+    tests: 0,
+    passed: 0,
+    failed: 0,
+    flaky: 0,
+    skipped: 0,
+  }
+
+  const visitSuite = (suite: JSONReportSuite) => {
+    suite.specs.forEach((spec) => {
+      stats.tests += spec.tests.length
+
+      spec.tests.forEach((test) => {
+        switch (test.status) {
+          case 'expected':
+            stats.passed += 1
+            break
+          case 'unexpected':
+            stats.failed += 1
+            break
+          case 'flaky':
+            stats.flaky += 1
+            break
+          case 'skipped':
+            stats.skipped += 1
+            break
+        }
+      })
+    })
+
+    const subSuites = suite.suites ?? []
+    subSuites.forEach(visitSuite)
+  }
+
+  summary.suites.forEach(visitSuite)
+
+  return stats
+}
+
 const taskById: Record<string, (argv: string[]) => Promise<void>> = {
   'reset-data': async () => {
     await waitFor('Waiting for application to be ready...', 5, async () => {
@@ -47,47 +87,11 @@ const taskById: Record<string, (argv: string[]) => Promise<void>> = {
       })
   },
   'check-results': async () => {
-    const summaryContent = await fsp.readFile(
-      new URL('../output/test/playwright/logs/summary.json', import.meta.url),
-      'utf-8',
-    )
+    const summaryPath = new URL('../output/test/playwright/logs/test-summary.json', import.meta.url)
+    const summaryContent = await fsp.readFile(summaryPath, 'utf-8')
     const summary = JSON.parse(summaryContent) as JSONReport
 
-    const stats = {
-      tests: 0,
-      passed: 0,
-      failed: 0,
-      flaky: 0,
-      skipped: 0,
-    }
-
-    const visitSuite = (suite: JSONReportSuite) => {
-      suite.specs.forEach((spec) => {
-        stats.tests += spec.tests.length
-
-        spec.tests.forEach((test) => {
-          switch (test.status) {
-            case 'expected':
-              stats.passed += 1
-              break
-            case 'unexpected':
-              stats.failed += 1
-              break
-            case 'flaky':
-              stats.flaky += 1
-              break
-            case 'skipped':
-              stats.skipped += 1
-              break
-          }
-        })
-      })
-
-      const subSuites = suite.suites ?? []
-      subSuites.forEach(visitSuite)
-    }
-
-    summary.suites.forEach(visitSuite)
+    const stats = getTestStats(summary)
 
     console.log(
       [
