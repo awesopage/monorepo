@@ -58,8 +58,8 @@ export const test = baseTest.extend<CustomFixtures>({
 })
 
 const DB_OPERATION_PREFIXES_BY_TYPE = {
-  read: ['find', 'count', 'group', 'aggregate'],
-  write: ['create', 'update', 'delete', 'upsert'],
+  read: ['find', 'count', 'group', 'aggregate', '$queryRaw'],
+  write: ['create', 'update', 'delete', 'upsert', '$executeRaw'],
 }
 
 type DB_OPERATION_TYPE = keyof typeof DB_OPERATION_PREFIXES_BY_TYPE
