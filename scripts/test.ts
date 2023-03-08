@@ -100,8 +100,8 @@ const taskById: Record<string, (argv: string[]) => Promise<void>> = {
         `Tests: ${stats.tests}`,
         `Passed: ${stats.passed}`,
         `Failed: ${stats.failed}`,
-        ...(stats.flaky > 0 ? [`Flaky: ${stats.flaky}`] : []),
-        ...(stats.skipped > 0 ? [`Skipped: ${stats.skipped}`] : []),
+        ...(stats.flaky ? [`Flaky: ${stats.flaky}`] : []),
+        ...(stats.skipped ? [`Skipped: ${stats.skipped}`] : []),
         '',
       ].join('\n'),
     )

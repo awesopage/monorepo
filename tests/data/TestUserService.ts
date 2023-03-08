@@ -1,7 +1,7 @@
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { assignUserRoles, findOrCreateUser, findUserByEmail } from 'pkg-app-api/src/user/UserService'
 import { assertDefined } from 'pkg-app-shared/src/common/AssertUtils'
-import { testUsers } from 'tests/data/TestUser'
+import { testUsers } from 'tests/data/TestUserData'
 
 export const createTestUsers = async () => {
   await prismaClient.$transaction(async (dbClient) => {

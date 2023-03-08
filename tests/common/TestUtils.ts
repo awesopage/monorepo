@@ -29,7 +29,7 @@ export const test = baseTest.extend<CustomFixtures>({
 
       const writeOperationCount = operations.filter((operation) => getOperationType(operation) === 'write').length
       const readOperationCount = operations.length - writeOperationCount
-      const isDatabaseDirty = writeOperationCount > 0
+      const isDatabaseDirty = !!writeOperationCount
 
       if (isDatabaseDirty) {
         await testDataApi.post({}, '/reset').res()
