@@ -9,7 +9,7 @@ import { request } from '@playwright/test'
 
 import { runCommand } from 'scripts/lib/script-utils'
 
-// All user names from tests/data/TestUsers.ts
+// All user names from tests/data/TestUserData.ts
 const TEST_USER_NAMES = ['admin1', 'admin2', 'reviewer1', 'reviewer2', 'user1', 'user2']
 
 const collectAuthStates = async () => {

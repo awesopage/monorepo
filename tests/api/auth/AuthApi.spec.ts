@@ -4,7 +4,8 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 import type { AuthInfo } from 'pkg-app-api/src/auth/AuthService'
 import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
-import { expect, test, withTestUser } from 'tests/common/TestUtils'
+import { expect, test } from 'tests/common/TestUtils'
+import { testUserFinders, withTestUser } from 'tests/data/TestUserData'
 
 const getAuthCallbackResponse = async (request: APIRequestContext, token: string): Promise<APIResponse> => {
   return request.post(`/api/auth/callback?token=${encodeURIComponent(token)}`)
@@ -17,7 +18,9 @@ const getAuthMeResponse = async (request: APIRequestContext): Promise<APIRespons
 const testReturnUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/welcome`
 
 test.describe('given signed in', () => {
-  withTestUser('user1')
+  const user = testUserFinders.noRole().first()
+
+  withTestUser(user)
 
   test.describe('when get current user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -25,8 +28,8 @@ test.describe('given signed in', () => {
       const authMe: AuthMeDTO = await authMeResponse.json()
 
       expect(authMe.user).toMatchObject({
-        email: 'user1@example.com',
-        displayName: 'User 1',
+        email: user.email,
+        displayName: user.displayName,
       })
     })
   })
