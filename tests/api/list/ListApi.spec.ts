@@ -72,7 +72,7 @@ test.describe('given signed in as admin', () => {
 
   test.describe('when set unapproved-list status', () => {
     test('should receive error', async ({ request }) => {
-      const setStatusListResponse = await getSetListStatusResponse(request, 'owner2', 'repo3', { status: 'ACTIVE' })
+      const setStatusListResponse = await getSetListStatusResponse(request, 'owner2', 'repo4', { status: 'ACTIVE' })
 
       expect(setStatusListResponse.ok()).toBe(false)
     })

@@ -8,7 +8,7 @@ export type TestList = Readonly<{
   tags: string[]
   requestedByEmail: string
   approvedByEmail?: string
-  currentStatus?: ListStatusEnum
+  currentStatus: ListStatusEnum
 }>
 
 export const testLists: TestList[] = [
@@ -20,6 +20,7 @@ export const testLists: TestList[] = [
     tags: ['topic1', 'topic2'],
     requestedByEmail: 'user1@example.com',
     approvedByEmail: 'reviewer2@example.com',
+    currentStatus: 'ACTIVE',
   },
   {
     owner: 'owner1',
@@ -29,6 +30,7 @@ export const testLists: TestList[] = [
     tags: ['topic2', 'topic3'],
     requestedByEmail: 'user2@example.com',
     approvedByEmail: 'reviewer1@example.com',
+    currentStatus: 'ACTIVE',
   },
   {
     owner: 'owner2',
@@ -37,6 +39,8 @@ export const testLists: TestList[] = [
     starCount: 5_000,
     tags: ['topic1', 'topic3'],
     requestedByEmail: 'reviewer1@example.com',
+    approvedByEmail: 'admin2@example.com',
+    currentStatus: 'ACTIVE',
   },
   {
     owner: 'owner2',

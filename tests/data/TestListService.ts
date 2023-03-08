@@ -21,9 +21,7 @@ export const createTestLists = async () => {
         await approveList(dbClient, { owner, repo, approvedByUser })
       }
 
-      if (currentStatus) {
-        await setListStatus(dbClient, { owner, repo, status: currentStatus, updatedByUser: admin1 })
-      }
+      await setListStatus(dbClient, { owner, repo, status: currentStatus, updatedByUser: admin1 })
     }
   })
 }
