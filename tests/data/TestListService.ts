@@ -1,7 +1,7 @@
 import { prismaClient } from 'pkg-app-api/src/common/DbClient'
 import { approveList, createList, setListStatus, updateList } from 'pkg-app-api/src/list/ListService'
 import { findUserByEmail } from 'pkg-app-api/src/user/UserService'
-import { testLists } from 'tests/data/TestList'
+import { testLists } from 'tests/data/TestListData'
 
 export const createTestLists = async () => {
   await prismaClient.$transaction(async (dbClient) => {
