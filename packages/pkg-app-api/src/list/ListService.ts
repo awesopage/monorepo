@@ -9,11 +9,11 @@ export type ListDetails = List &
     approvedBy?: User
   }>
 
-export interface CreateListOptions {
-  readonly owner: string
-  readonly repo: string
-  readonly requestedByUser: User
-}
+export type CreateListOptions = Readonly<{
+  owner: string
+  repo: string
+  requestedByUser: User
+}>
 
 export const createList = async (dbClient: DbClient, options: CreateListOptions): Promise<List> => {
   const { owner, repo, requestedByUser } = options
@@ -46,14 +46,14 @@ export const createList = async (dbClient: DbClient, options: CreateListOptions)
   return list
 }
 
-export interface UpdateListOptions {
-  readonly owner: string
-  readonly repo: string
-  readonly description?: string
-  readonly starCount?: number
-  readonly tags?: string[]
-  readonly updatedByUser: User
-}
+export type UpdateListOptions = Readonly<{
+  owner: string
+  repo: string
+  description?: string
+  starCount?: number
+  tags?: string[]
+  updatedByUser: User
+}>
 
 export const updateList = async (dbClient: DbClient, options: UpdateListOptions): Promise<List> => {
   const { owner, repo, description, starCount, tags, updatedByUser } = options
@@ -77,11 +77,11 @@ export const updateList = async (dbClient: DbClient, options: UpdateListOptions)
   return list
 }
 
-export interface ApproveListOptions {
-  readonly owner: string
-  readonly repo: string
-  readonly approvedByUser: User
-}
+export type ApproveListOptions = Readonly<{
+  owner: string
+  repo: string
+  approvedByUser: User
+}>
 
 export const approveList = async (dbClient: DbClient, options: ApproveListOptions): Promise<List> => {
   const { owner, repo, approvedByUser } = options
@@ -116,10 +116,10 @@ export const findActiveLists = async (dbClient: DbClient): Promise<List[]> => {
   return lists
 }
 
-export interface FindListByOwnerAndRepoOptions {
-  readonly owner: string
-  readonly repo: string
-}
+export type FindListByOwnerAndRepoOptions = Readonly<{
+  owner: string
+  repo: string
+}>
 
 export const findListByOwnerAndRepo = async (
   dbClient: DbClient,
@@ -138,12 +138,12 @@ export const findListByOwnerAndRepo = async (
   }
 }
 
-export interface SetListStatusOptions {
-  readonly owner: string
-  readonly repo: string
-  readonly status: ListStatusEnum
-  readonly updatedByUser: User
-}
+export type SetListStatusOptions = Readonly<{
+  owner: string
+  repo: string
+  status: ListStatusEnum
+  updatedByUser: User
+}>
 
 export const setListStatus = async (dbClient: DbClient, options: SetListStatusOptions): Promise<List> => {
   const { owner, repo, status, updatedByUser } = options

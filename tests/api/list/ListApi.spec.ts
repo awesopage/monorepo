@@ -187,15 +187,33 @@ test.describe('given not signed in', () => {
     test('should receive correct lists', async ({ request }) => {
       const findListsResponse = await getFindListsResponse(request)
 
-      expect(findListsResponse.ok()).toBe(true)
+      const lists: ListDTO[] = await findListsResponse.json()
+
+      expect(lists).toMatchObject([
+        {
+          owner: 'owner1',
+          repo: 'repo1',
+        },
+        {
+          owner: 'owner1',
+          repo: 'repo2',
+        },
+        {
+          owner: 'owner2',
+          repo: 'repo3',
+        },
+      ])
     })
   })
 
   test.describe('when find list by key', () => {
     test('should receive correct list', async ({ request }) => {
       const findListsByKeyResponse = await getFindListsByKeyResponse(request, 'owner1', 'repo1')
-
-      expect(findListsByKeyResponse.ok()).toBe(true)
+      const lists: ListDTO[] = await findListsByKeyResponse.json()
+      expect(lists).toMatchObject({
+        owner: 'owner1',
+        repo: 'repo1',
+      })
     })
   })
 })
