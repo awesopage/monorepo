@@ -2,8 +2,8 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 
 import type { AssignUserRolesOptionsDTO } from 'pkg-app-shared/src/user/RoleApiOptions'
 import type { Role, UserDTO } from 'pkg-app-shared/src/user/UserDTO'
-import { expect, test, testDataApi, withTestUser } from 'tests/common/TestUtils'
-import { testUsers } from 'tests/data/TestUserData'
+import { expect, test, testDataApi } from 'tests/common/TestUtils'
+import { testUserReferences, withTestUser } from 'tests/data/TestUserData'
 
 const getAssignUserRolesResponse = async (
   request: APIRequestContext,
@@ -12,12 +12,8 @@ const getAssignUserRolesResponse = async (
   return request.post('/api/roles', { data: options })
 }
 
-const getUserNameFromEmail = (email: string) => {
-  return email.split('@')[0] ?? ''
-}
-
-test.describe('given signed in as role-admin', () => {
-  withTestUser(getUserNameFromEmail(process.env.APP_ROLE_ADMIN_EMAIL ?? ''))
+test.describe('given signed in as role manager', () => {
+  withTestUser(testUserReferences.roleManager)
 
   test.describe('when assign ADMIN role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -39,12 +35,8 @@ test.describe('given signed in as role-admin', () => {
   })
 })
 
-test.describe('given signed in as admin but not role-admin', () => {
-  const nonRoleAdminUser = testUsers.find(
-    ({ email, roles }) => roles && roles.includes('ADMIN') && email !== process.env.APP_ROLE_ADMIN_EMAIL,
-  )
-
-  withTestUser(getUserNameFromEmail(nonRoleAdminUser?.email ?? ''))
+test.describe('given signed in as admin but not role manager', () => {
+  withTestUser(testUserReferences.adminButNotRoleManager)
 
   test.describe('when assign ADMIN role to user', () => {
     test('should receive error', async ({ request }) => {
@@ -61,7 +53,7 @@ test.describe('given signed in as admin but not role-admin', () => {
 })
 
 test.describe('given signed in as admin', () => {
-  withTestUser('admin1')
+  withTestUser(testUserReferences.admin)
 
   test.describe('when assign role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -84,7 +76,7 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in but not admin', () => {
-  withTestUser('reviewer1')
+  withTestUser(testUserReferences.notAdmin)
 
   test.describe('when assign role to user', () => {
     test('should receive error', async ({ request }) => {

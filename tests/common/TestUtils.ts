@@ -78,8 +78,10 @@ const getOperationType = (operation: string): DB_OPERATION_TYPE => {
   return operationType
 }
 
-export const withTestUser = (userName: string) => {
-  test.use({
-    storageState: `output/test/playwright/setup/${userName}-auth-state.json`,
-  })
+export const requireDefined = <T>(value: T | undefined): T => {
+  if (typeof value === 'undefined') {
+    throw new Error('Undefined value')
+  }
+
+  return value
 }

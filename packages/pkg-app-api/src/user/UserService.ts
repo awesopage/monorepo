@@ -43,7 +43,7 @@ export const assignUserRoles = async (dbClient: DbClient, options: AssignUserRol
   const { email, roles, assignedByUser } = options
 
   if (roles.includes('ADMIN')) {
-    if (assignedByUser.email !== process.env.APP_ROLE_ADMIN_EMAIL) {
+    if (assignedByUser.email !== process.env.APP_ROLE_MANAGER_EMAIL) {
       throw new Error(`${assignedByUser.email} cannot assign ADMIN role`)
     }
   } else {
