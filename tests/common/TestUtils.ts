@@ -78,10 +78,44 @@ const getOperationType = (operation: string): DB_OPERATION_TYPE => {
   return operationType
 }
 
-export const requireDefined = <T>(value: T | undefined): T => {
-  if (typeof value === 'undefined') {
-    throw new Error('Undefined value')
-  }
+export type FilterCondition<T> = (value: T) => boolean
 
-  return value
+export const conditionHelpers = {
+  negate: <T>(condition: FilterCondition<T>): FilterCondition<T> => {
+    return (value: T) => !condition(value)
+  },
+}
+
+export type TestDataFinder<T> = (extraCondition?: FilterCondition<T>) => Readonly<{
+  first: () => T
+  all: () => T[]
+}>
+
+export const createTestDataFinders = <T, K extends string>(
+  data: T[],
+  conditionsByKey: Record<K, FilterCondition<T>[]>,
+): Record<K, TestDataFinder<T>> => {
+  const keys = Object.keys(conditionsByKey) as K[]
+
+  return keys.reduce((testDataFinders: Partial<Record<K, TestDataFinder<T>>>, key: K) => {
+    testDataFinders[key] = (extraCondition?: FilterCondition<T>) => {
+      const allConditions = [...conditionsByKey[key], extraCondition].filter(Boolean)
+      const items = data.filter((item) => allConditions.every((condition) => condition(item)))
+
+      return {
+        first: () => {
+          if (typeof items[0] === 'undefined') {
+            throw new Error('No test data satisfies all conditions')
+          }
+
+          return items[0]
+        },
+        all: () => {
+          return items
+        },
+      }
+    }
+
+    return testDataFinders
+  }, {}) as Record<K, TestDataFinder<T>>
 }

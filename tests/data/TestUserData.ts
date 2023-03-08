@@ -1,5 +1,6 @@
 import type { RoleEnum } from 'pkg-app-model/client'
-import { requireDefined, test } from 'tests/common/TestUtils'
+import type { FilterCondition } from 'tests/common/TestUtils'
+import { conditionHelpers, createTestDataFinders, test } from 'tests/common/TestUtils'
 
 export type TestUser = Readonly<{
   email: string
@@ -44,21 +45,23 @@ export const withTestUser = (testUser: TestUser) => {
   })
 }
 
-const hasRole = (testUser: TestUser, role: RoleEnum) => {
-  return testUser.roles?.includes(role)
+export const testUserConditions = {
+  hasRole: (role: RoleEnum): FilterCondition<TestUser> => {
+    return (testUser) => !!testUser.roles?.includes(role)
+  },
+  isRoleManager: (): FilterCondition<TestUser> => {
+    return (testUser) => testUser.email === process.env.APP_ROLE_MANAGER_EMAIL
+  },
 }
 
-const isRoleManager = (testUser: TestUser) => {
-  return testUser.email === process.env.APP_ROLE_MANAGER_EMAIL
-}
-
-export const testUserReferences = {
-  admin: requireDefined(testUsers.find((testUser) => hasRole(testUser, 'ADMIN'))),
-  notAdmin: requireDefined(testUsers.find((testUser) => !hasRole(testUser, 'ADMIN'))),
-  roleManager: requireDefined(testUsers.find((testUser) => hasRole(testUser, 'ADMIN') && isRoleManager(testUser))),
-  adminButNotRoleManager: requireDefined(
-    testUsers.find((testUser) => hasRole(testUser, 'ADMIN') && !isRoleManager(testUser)),
-  ),
-  reviewer: requireDefined(testUsers.find((testUser) => hasRole(testUser, 'REVIEWER'))),
-  noRole: requireDefined(testUsers.find((testUser) => !testUser.roles?.length)),
-}
+export const testUserFinders = createTestDataFinders(testUsers, {
+  admin: [testUserConditions.hasRole('ADMIN')],
+  notAdmin: [conditionHelpers.negate(testUserConditions.hasRole('ADMIN'))],
+  roleManager: [testUserConditions.hasRole('ADMIN'), testUserConditions.isRoleManager()],
+  adminButNotRoleManager: [
+    testUserConditions.hasRole('ADMIN'),
+    conditionHelpers.negate(testUserConditions.isRoleManager()),
+  ],
+  reviewer: [testUserConditions.hasRole('REVIEWER')],
+  noRole: [(testUser) => !testUser.roles?.length],
+})
