@@ -3,7 +3,7 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 import type { AssignUserRolesOptionsDTO } from 'pkg-app-shared/src/user/RoleApiOptions'
 import type { Role, UserDTO } from 'pkg-app-shared/src/user/UserDTO'
 import { expect, test, testDataApi, withTestUser } from 'tests/common/TestUtils'
-import { testUsers } from 'tests/data/TestUser'
+import { testUsers } from 'tests/data/TestUserData'
 
 const getAssignUserRolesResponse = async (
   request: APIRequestContext,
