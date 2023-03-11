@@ -39,7 +39,7 @@ export const testUsers: TestUser[] = [
   },
 ]
 
-export const withTestUser = (testUser: TestUser) => {
+export const withAuth = (testUser: TestUser) => {
   test.use({
     storageState: `output/test/playwright/setup/${testUser.email.split('@')[0] ?? ''}-auth-state.json`,
   })

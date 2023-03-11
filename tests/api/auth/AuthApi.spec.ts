@@ -5,7 +5,7 @@ import type { AuthInfo } from 'pkg-app-api/src/auth/AuthService'
 import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
 import { expect, test } from 'tests/common/TestUtils'
-import { testUserFinders, withTestUser } from 'tests/data/TestUserData'
+import { testUserFinders, withAuth } from 'tests/data/TestUserData'
 
 const getAuthCallbackResponse = async (request: APIRequestContext, token: string): Promise<APIResponse> => {
   return request.post(`/api/auth/callback?token=${encodeURIComponent(token)}`)
@@ -20,7 +20,7 @@ const testReturnUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/welcome`
 test.describe('given signed in', () => {
   const user = testUserFinders.noRole().first()
 
-  withTestUser(user)
+  withAuth(user)
 
   test.describe('when get current user', () => {
     test('should receive correct user', async ({ request }) => {
