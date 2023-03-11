@@ -7,6 +7,7 @@ import type {
 } from 'pkg-app-shared/src/list/ListApiOptions'
 import type { ListDTO } from 'pkg-app-shared/src/list/ListDTO'
 import { expect, test } from 'tests/common/TestUtils'
+import { findTestList } from 'tests/data/TestListData'
 import { findTestUser, withAuth } from 'tests/data/TestUserData'
 
 const getCreateListResponse = async (
@@ -81,7 +82,8 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in as reviewer', () => {
-  withAuth(findTestUser(({ hasRole }) => hasRole('REVIEWER')).any())
+  const reviewer = findTestUser(({ hasRole }) => hasRole('REVIEWER')).any()
+  withAuth(reviewer)
 
   test.describe('when update list', () => {
     test('should receive correct list', async ({ request }) => {
@@ -105,13 +107,16 @@ test.describe('given signed in as reviewer', () => {
 
   test.describe('when approve list requested by different user', () => {
     test('should receive correct list', async ({ request }) => {
-      const approveListResponse = await getApproveListResponse(request, 'owner2', 'repo4-inactive')
+      const requestedList = findTestList(({ hasRequestedByEmail, not }) =>
+        not(hasRequestedByEmail(reviewer.email)),
+      ).any()
+      const approveListResponse = await getApproveListResponse(request, requestedList.owner, requestedList.repo)
 
       const list: ListDTO = await approveListResponse.json()
 
       expect(list).toMatchObject({
-        owner: 'owner2',
-        repo: 'repo4-inactive',
+        owner: requestedList.owner,
+        repo: requestedList.repo,
         isApproved: true,
       })
     })
@@ -119,11 +124,16 @@ test.describe('given signed in as reviewer', () => {
 
   test.describe('when approve list requested by same user', () => {
     test('should receive error', async ({ request }) => {
-      const approveListResponse = await getApproveListResponse(request, 'owner2', 'repo3')
+      const requestedList = findTestList(({ hasRequestedByEmail }) => hasRequestedByEmail(reviewer.email)).any()
+      const approveListResponse = await getApproveListResponse(request, requestedList.owner, requestedList.repo)
 
       expect(approveListResponse.ok()).toBe(false)
     })
   })
+})
+
+test.describe('given signed in but not admin', () => {
+  withAuth(findTestUser(({ hasRole, not }) => not(hasRole('ADMIN'))).any())
 
   test.describe('when set list status', () => {
     test('should receive error', async ({ request }) => {

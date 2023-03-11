@@ -1,4 +1,6 @@
 import type { ListStatusEnum } from 'pkg-app-model/client'
+import type { TestDataPredicate } from 'tests/data/TestDataFinder'
+import { createTestDataFinder } from 'tests/data/TestDataFinder'
 
 export type TestList = Readonly<{
   owner: string
@@ -48,7 +50,15 @@ export const testLists: TestList[] = [
     description: 'Awesome List 4 - Inactive',
     starCount: 10_000,
     tags: ['topic2', 'topic4'],
-    requestedByEmail: 'admin2@example.com',
+    requestedByEmail: 'admin1@example.com',
     currentStatus: 'INACTIVE',
   },
 ]
+
+export const findTestList = createTestDataFinder(testLists, () => {
+  const hasRequestedByEmail = (requesterEmail: string): TestDataPredicate<TestList> => {
+    return ({ requestedByEmail }) => requesterEmail === requestedByEmail
+  }
+
+  return { hasRequestedByEmail }
+})
