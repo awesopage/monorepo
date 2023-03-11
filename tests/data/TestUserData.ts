@@ -1,6 +1,9 @@
+import assert from 'node:assert'
+
 import type { RoleEnum } from 'pkg-app-model/client'
-import type { FilterCondition } from 'tests/common/TestUtils'
-import { conditionHelpers, createTestDataFinders, test } from 'tests/common/TestUtils'
+import type { TestDataPredicate } from 'tests/common/TestDataFinder'
+import { createTestDataFinder } from 'tests/common/TestDataFinder'
+import { test } from 'tests/common/TestUtils'
 
 export type TestUser = Readonly<{
   email: string
@@ -45,23 +48,19 @@ export const withAuth = (testUser: TestUser) => {
   })
 }
 
-export const testUserConditions = {
-  hasRole: (role: RoleEnum): FilterCondition<TestUser> => {
-    return (testUser) => !!testUser.roles?.includes(role)
-  },
-  isRoleManager: (): FilterCondition<TestUser> => {
-    return (testUser) => testUser.email === process.env.APP_ROLE_MANAGER_EMAIL
-  },
-}
+export const findTestUser = createTestDataFinder(testUsers, ({ and }) => {
+  assert.ok(process.env.APP_ROLE_MANAGER_EMAIL)
 
-export const testUserFinders = createTestDataFinders(testUsers, {
-  admin: [testUserConditions.hasRole('ADMIN')],
-  notAdmin: [conditionHelpers.negate(testUserConditions.hasRole('ADMIN'))],
-  roleManager: [testUserConditions.hasRole('ADMIN'), testUserConditions.isRoleManager()],
-  adminButNotRoleManager: [
-    testUserConditions.hasRole('ADMIN'),
-    conditionHelpers.negate(testUserConditions.isRoleManager()),
-  ],
-  reviewer: [testUserConditions.hasRole('REVIEWER')],
-  noRole: [(testUser) => !testUser.roles?.length],
+  const hasRole = (role: RoleEnum): TestDataPredicate<TestUser> => {
+    return ({ roles }) => !!roles?.includes(role)
+  }
+
+  const hasNoRole: TestDataPredicate<TestUser> = ({ roles }) => !roles?.length
+
+  const isRoleManager: TestDataPredicate<TestUser> = and(
+    hasRole('ADMIN'),
+    ({ email }) => email === process.env.APP_ROLE_MANAGER_EMAIL,
+  )
+
+  return { hasRole, hasNoRole, isRoleManager }
 })
