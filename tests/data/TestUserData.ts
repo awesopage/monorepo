@@ -1,9 +1,9 @@
 import assert from 'node:assert'
 
 import type { RoleEnum } from 'pkg-app-model/client'
-import type { TestDataPredicate } from 'tests/common/TestDataFinder'
-import { createTestDataFinder } from 'tests/common/TestDataFinder'
 import { test } from 'tests/common/TestUtils'
+import type { TestDataPredicate } from 'tests/data/TestDataFinder'
+import { createTestDataFinder } from 'tests/data/TestDataFinder'
 
 export type TestUser = Readonly<{
   email: string

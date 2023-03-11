@@ -16,7 +16,7 @@ export type TestDataFinderOperators<T> = Readonly<ReturnType<typeof createTestDa
 
 const createTestDataExtractor = <T>(matchedValues: T[]) => {
   return {
-    first: () => {
+    any: () => {
       const firstMatchedValue = matchedValues[0]
 
       if (typeof firstMatchedValue === 'undefined') {
