@@ -1,3 +1,5 @@
+import assert from 'node:assert'
+
 import type { APIRequestContext, APIResponse } from '@playwright/test'
 
 import type {
@@ -82,7 +84,25 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in as reviewer', () => {
-  const reviewer = findTestUser(({ hasRole }) => hasRole('REVIEWER')).any()
+  const reviewers = findTestUser(({ hasRole }) => hasRole('REVIEWER')).all()
+  const { reviewer, listRequestedBySameUser, listRequestedByDiffUser } =
+    reviewers
+      .map((reviewer) => {
+        const listRequestedBySameUser = findTestList(({ isRequestedBy }) => isRequestedBy(reviewer.email)).peek()
+        const listRequestedByDiffUser = findTestList(({ isRequestedBy, not }) =>
+          not(isRequestedBy(reviewer.email)),
+        ).peek()
+
+        return { reviewer, listRequestedBySameUser, listRequestedByDiffUser }
+      })
+      .find(
+        ({ listRequestedBySameUser, listRequestedByDiffUser }) => listRequestedBySameUser && listRequestedByDiffUser,
+      ) ?? {}
+
+  assert.ok(reviewer)
+  assert.ok(listRequestedBySameUser)
+  assert.ok(listRequestedByDiffUser)
+
   withAuth(reviewer)
 
   test.describe('when update list', () => {
@@ -107,16 +127,17 @@ test.describe('given signed in as reviewer', () => {
 
   test.describe('when approve list requested by different user', () => {
     test('should receive correct list', async ({ request }) => {
-      const requestedList = findTestList(({ hasRequestedByEmail, not }) =>
-        not(hasRequestedByEmail(reviewer.email)),
-      ).any()
-      const approveListResponse = await getApproveListResponse(request, requestedList.owner, requestedList.repo)
+      const approveListResponse = await getApproveListResponse(
+        request,
+        listRequestedByDiffUser.owner,
+        listRequestedByDiffUser.repo,
+      )
 
       const list: ListDTO = await approveListResponse.json()
 
       expect(list).toMatchObject({
-        owner: requestedList.owner,
-        repo: requestedList.repo,
+        owner: listRequestedByDiffUser.owner,
+        repo: listRequestedByDiffUser.repo,
         isApproved: true,
       })
     })
@@ -124,8 +145,11 @@ test.describe('given signed in as reviewer', () => {
 
   test.describe('when approve list requested by same user', () => {
     test('should receive error', async ({ request }) => {
-      const requestedList = findTestList(({ hasRequestedByEmail }) => hasRequestedByEmail(reviewer.email)).any()
-      const approveListResponse = await getApproveListResponse(request, requestedList.owner, requestedList.repo)
+      const approveListResponse = await getApproveListResponse(
+        request,
+        listRequestedBySameUser.owner,
+        listRequestedBySameUser.repo,
+      )
 
       expect(approveListResponse.ok()).toBe(false)
     })

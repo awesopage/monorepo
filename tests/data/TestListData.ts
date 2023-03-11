@@ -50,15 +50,15 @@ export const testLists: TestList[] = [
     description: 'Awesome List 4 - Inactive',
     starCount: 10_000,
     tags: ['topic2', 'topic4'],
-    requestedByEmail: 'admin1@example.com',
+    requestedByEmail: 'admin2@example.com',
     currentStatus: 'INACTIVE',
   },
 ]
 
 export const findTestList = createTestDataFinder(testLists, () => {
-  const hasRequestedByEmail = (requesterEmail: string): TestDataPredicate<TestList> => {
-    return ({ requestedByEmail }) => requesterEmail === requestedByEmail
+  const isRequestedBy = (email: string): TestDataPredicate<TestList> => {
+    return ({ requestedByEmail }) => requestedByEmail === email
   }
 
-  return { hasRequestedByEmail }
+  return { isRequestedBy }
 })
