@@ -106,7 +106,7 @@ const taskById: Record<string, (argv: string[]) => Promise<void>> = {
       ].join('\n'),
     )
 
-    if (stats.failed) {
+    if (!stats.tests || stats.failed) {
       process.exit(1)
     }
   },

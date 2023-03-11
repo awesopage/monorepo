@@ -6,7 +6,8 @@ import type {
   UpdateListOptionsDTO,
 } from 'pkg-app-shared/src/list/ListApiOptions'
 import type { ListDTO } from 'pkg-app-shared/src/list/ListDTO'
-import { expect, test, withTestUser } from 'tests/common/TestUtils'
+import { expect, test } from 'tests/common/TestUtils'
+import { findTestUser, withAuth } from 'tests/data/TestUserData'
 
 const getCreateListResponse = async (
   request: APIRequestContext,
@@ -54,7 +55,7 @@ const getFindListsByKeyResponse = async (
 }
 
 test.describe('given signed in as admin', () => {
-  withTestUser('admin1')
+  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).first())
 
   test.describe('when set approved-list status', () => {
     test('should receive correct list', async ({ request }) => {
@@ -80,7 +81,7 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in as reviewer', () => {
-  withTestUser('reviewer1')
+  withAuth(findTestUser(({ hasRole }) => hasRole('REVIEWER')).first())
 
   test.describe('when update list', () => {
     test('should receive correct list', async ({ request }) => {
@@ -134,7 +135,7 @@ test.describe('given signed in as reviewer', () => {
 })
 
 test.describe('given signed in but no role', () => {
-  withTestUser('user1')
+  withAuth(findTestUser(({ hasNoRole }) => hasNoRole).first())
 
   test.describe('when create list', () => {
     test('should receive correct list', async ({ request }) => {

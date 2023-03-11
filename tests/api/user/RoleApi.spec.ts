@@ -3,7 +3,7 @@ import type { APIRequestContext, APIResponse } from '@playwright/test'
 import type { AssignUserRolesOptionsDTO } from 'pkg-app-shared/src/user/RoleApiOptions'
 import type { Role, UserDTO } from 'pkg-app-shared/src/user/UserDTO'
 import { expect, test, testDataApi } from 'tests/common/TestUtils'
-import { testUserFinders, withTestUser } from 'tests/data/TestUserData'
+import { findTestUser, withAuth } from 'tests/data/TestUserData'
 
 const getAssignUserRolesResponse = async (
   request: APIRequestContext,
@@ -13,7 +13,7 @@ const getAssignUserRolesResponse = async (
 }
 
 test.describe('given signed in as role manager', () => {
-  withTestUser(testUserFinders.roleManager().first())
+  withAuth(findTestUser(({ isRoleManager }) => isRoleManager).first())
 
   test.describe('when assign ADMIN role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -36,7 +36,11 @@ test.describe('given signed in as role manager', () => {
 })
 
 test.describe('given signed in as admin but not role manager', () => {
-  withTestUser(testUserFinders.adminButNotRoleManager().first())
+  withAuth(
+    findTestUser(({ hasRole, isRoleManager, and, not }) => {
+      return and(hasRole('ADMIN'), not(isRoleManager))
+    }).first(),
+  )
 
   test.describe('when assign ADMIN role to user', () => {
     test('should receive error', async ({ request }) => {
@@ -53,7 +57,7 @@ test.describe('given signed in as admin but not role manager', () => {
 })
 
 test.describe('given signed in as admin', () => {
-  withTestUser(testUserFinders.admin().first())
+  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).first())
 
   test.describe('when assign role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -76,7 +80,7 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in but not admin', () => {
-  withTestUser(testUserFinders.notAdmin().first())
+  withAuth(findTestUser(({ hasRole, not }) => not(hasRole('ADMIN'))).first())
 
   test.describe('when assign role to user', () => {
     test('should receive error', async ({ request }) => {
