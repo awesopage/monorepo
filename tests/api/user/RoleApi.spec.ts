@@ -13,7 +13,7 @@ const getAssignUserRolesResponse = async (
 }
 
 test.describe('given signed in as role manager', () => {
-  withAuth(findTestUser(({ isRoleManager }) => isRoleManager).first())
+  withAuth(findTestUser(({ isRoleManager }) => isRoleManager).any())
 
   test.describe('when assign ADMIN role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -39,7 +39,7 @@ test.describe('given signed in as admin but not role manager', () => {
   withAuth(
     findTestUser(({ hasRole, isRoleManager, and, not }) => {
       return and(hasRole('ADMIN'), not(isRoleManager))
-    }).first(),
+    }).any(),
   )
 
   test.describe('when assign ADMIN role to user', () => {
@@ -57,7 +57,7 @@ test.describe('given signed in as admin but not role manager', () => {
 })
 
 test.describe('given signed in as admin', () => {
-  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).first())
+  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).any())
 
   test.describe('when assign role to user', () => {
     test('should receive correct user', async ({ request }) => {
@@ -80,7 +80,7 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in but not admin', () => {
-  withAuth(findTestUser(({ hasRole, not }) => not(hasRole('ADMIN'))).first())
+  withAuth(findTestUser(({ hasRole, not }) => not(hasRole('ADMIN'))).any())
 
   test.describe('when assign role to user', () => {
     test('should receive error', async ({ request }) => {

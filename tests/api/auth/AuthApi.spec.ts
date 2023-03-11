@@ -18,7 +18,7 @@ const getAuthMeResponse = async (request: APIRequestContext): Promise<APIRespons
 const testReturnUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/welcome`
 
 test.describe('given signed in', () => {
-  const user = findTestUser(({ hasNoRole }) => hasNoRole).first()
+  const user = findTestUser(({ hasNoRole }) => hasNoRole).any()
 
   withAuth(user)
 

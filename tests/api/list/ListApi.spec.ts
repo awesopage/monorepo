@@ -55,7 +55,7 @@ const getFindListsByKeyResponse = async (
 }
 
 test.describe('given signed in as admin', () => {
-  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).first())
+  withAuth(findTestUser(({ hasRole }) => hasRole('ADMIN')).any())
 
   test.describe('when set approved-list status', () => {
     test('should receive correct list', async ({ request }) => {
@@ -81,7 +81,7 @@ test.describe('given signed in as admin', () => {
 })
 
 test.describe('given signed in as reviewer', () => {
-  withAuth(findTestUser(({ hasRole }) => hasRole('REVIEWER')).first())
+  withAuth(findTestUser(({ hasRole }) => hasRole('REVIEWER')).any())
 
   test.describe('when update list', () => {
     test('should receive correct list', async ({ request }) => {
@@ -135,7 +135,7 @@ test.describe('given signed in as reviewer', () => {
 })
 
 test.describe('given signed in but no role', () => {
-  withAuth(findTestUser(({ hasNoRole }) => hasNoRole).first())
+  withAuth(findTestUser(({ hasNoRole }) => hasNoRole).any())
 
   test.describe('when create list', () => {
     test('should receive correct list', async ({ request }) => {
