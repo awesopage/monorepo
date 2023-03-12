@@ -4,9 +4,9 @@
 
 # Awesopage
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/awesopage/monorepo/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/awesopage/monorepo/tree/develop)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/6ff90b49c21c344b6df0/test_coverage)](https://codeclimate.com/github/awesopage/monorepo/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6ff90b49c21c344b6df0/maintainability)](https://codeclimate.com/github/awesopage/monorepo/maintainability)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/awesopage/awesopage/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/awesopage/awesopage/tree/develop)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/bbcfad5fd5b618bced72/test_coverage)](https://codeclimate.com/github/awesopage/awesopage/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bbcfad5fd5b618bced72/maintainability)](https://codeclimate.com/github/awesopage/awesopage/maintainability)
 
 ## Tech stack
 
