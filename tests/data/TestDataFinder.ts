@@ -16,14 +16,17 @@ export type TestDataFinderOperators<T> = Readonly<ReturnType<typeof createTestDa
 
 const createTestDataExtractor = <T>(matchedValues: T[]) => {
   return {
+    peek: () => {
+      return matchedValues[0]
+    },
     any: () => {
-      const firstMatchedValue = matchedValues[0]
+      const matchedValue = matchedValues[0]
 
-      if (typeof firstMatchedValue === 'undefined') {
+      if (typeof matchedValue === 'undefined') {
         throw new Error('No test data found')
       }
 
-      return firstMatchedValue
+      return matchedValue
     },
     all: () => {
       return matchedValues
