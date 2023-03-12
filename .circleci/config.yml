@@ -36,6 +36,14 @@ jobs:
           name: Run tests
           # Handle test failure later in "Check test results" step after uploading artifacts
           command: pnpm test || true
+      - run:
+          name: Send coverage report to Code Climate
+          # Based on https://docs.codeclimate.com/docs/circle-ci-test-coverage-example
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter format-coverage -t lcov -o ./output/test/coverage/report/codeclimate.json ./output/test/coverage/report/lcov.info
+            ./cc-test-reporter upload-coverage -i ./output/test/coverage/report/codeclimate.json
       - store_artifacts:
           path: ./output/test/playwright/html
           destination: playwright-report
@@ -47,14 +55,6 @@ jobs:
           destination: coverage-report
       - store_test_results:
           path: ./output/test/playwright/junit.xml
-      - run:
-          name: Send coverage report to Code Climate
-          # Based on https://docs.codeclimate.com/docs/circle-ci-test-coverage-example
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-            ./cc-test-reporter format-coverage -t lcov -o ./output/test/coverage/report/codeclimate.json ./output/test/coverage/report/lcov.info
-            ./cc-test-reporter upload-coverage -i ./output/test/coverage/report/codeclimate.json
       - run:
           name: Check test results
           command: pnpm test:check
