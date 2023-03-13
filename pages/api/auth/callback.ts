@@ -1,3 +1,3 @@
-import { authCallbackApiHandler } from 'pkg-app-api/src/auth/AuthApi'
+import { authCallbackApiHandler } from 'pkg-app-api/src/auth/AuthCallbackApiHandler'
 
 export default authCallbackApiHandler
