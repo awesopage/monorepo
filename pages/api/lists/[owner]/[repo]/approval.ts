@@ -1,3 +1,3 @@
-import { listByKeyApprovalApiHandler } from 'pkg-app-api/src/list/ListApi'
+import { listByKeyApprovalApiHandler } from 'pkg-app-api/src/list/ListByKeyApprovalApiHandler'
 
 export default listByKeyApprovalApiHandler

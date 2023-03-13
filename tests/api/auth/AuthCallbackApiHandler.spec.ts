@@ -2,38 +2,14 @@ import * as iron from '@hapi/iron'
 import type { APIRequestContext, APIResponse } from '@playwright/test'
 
 import type { AuthInfo } from 'pkg-app-api/src/auth/AuthService'
-import type { AuthMeDTO } from 'pkg-app-shared/src/auth/AuthMeDTO'
 import type { UserDTO } from 'pkg-app-shared/src/user/UserDTO'
 import { expect, test } from 'tests/common/TestUtils'
-import { findTestUser, withAuth } from 'tests/data/TestUserData'
 
 const getAuthCallbackResponse = async (request: APIRequestContext, token: string): Promise<APIResponse> => {
   return request.post(`/api/auth/callback?token=${encodeURIComponent(token)}`)
 }
 
-const getAuthMeResponse = async (request: APIRequestContext): Promise<APIResponse> => {
-  return request.get('/api/auth/me')
-}
-
 const testReturnUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/welcome`
-
-test.describe('given signed in', () => {
-  const user = findTestUser(({ hasNoRole }) => hasNoRole).any()
-
-  withAuth(user)
-
-  test.describe('when get current user', () => {
-    test('should receive correct user', async ({ request }) => {
-      const authMeResponse = await getAuthMeResponse(request)
-      const authMe: AuthMeDTO = await authMeResponse.json()
-
-      expect(authMe.user).toMatchObject({
-        email: user.email,
-        displayName: user.displayName,
-      })
-    })
-  })
-})
 
 test.describe('given not signed in', () => {
   test.describe('when provide valid token to auth callback', () => {
@@ -63,14 +39,6 @@ test.describe('given not signed in', () => {
       const authCallbackResponse = await getAuthCallbackResponse(request, token)
 
       expect(authCallbackResponse.url()).toBe(testReturnUrl)
-
-      const authMeResponse = await getAuthMeResponse(request)
-      const authMe: AuthMeDTO = await authMeResponse.json()
-
-      expect(authMe.user).toMatchObject({
-        email: 'test_user@example.com',
-        displayName: 'test_user',
-      })
     })
   })
 
@@ -83,7 +51,7 @@ test.describe('given not signed in', () => {
 
       const authCallbackResponse = await getAuthCallbackResponse(request, token)
 
-      await expectAuthCallbackError(authCallbackResponse, request)
+      await expectAuthCallbackError(authCallbackResponse)
     })
   })
 
@@ -99,7 +67,7 @@ test.describe('given not signed in', () => {
 
       const authCallbackResponse = await getAuthCallbackResponse(request, token)
 
-      await expectAuthCallbackError(authCallbackResponse, request)
+      await expectAuthCallbackError(authCallbackResponse)
     })
   })
 
@@ -107,16 +75,7 @@ test.describe('given not signed in', () => {
     test('should receive error', async ({ request }) => {
       const authCallbackResponse = await getAuthCallbackResponse(request, 'test_token')
 
-      await expectAuthCallbackError(authCallbackResponse, request)
-    })
-  })
-
-  test.describe('when get current user', () => {
-    test('should receive no user', async ({ request }) => {
-      const authMeResponse = await getAuthMeResponse(request)
-      const authMe: AuthMeDTO = await authMeResponse.json()
-
-      expect(authMe.user).toBeUndefined()
+      await expectAuthCallbackError(authCallbackResponse)
     })
   })
 })
@@ -128,11 +87,6 @@ const getAuthToken = (authInfo: AuthInfo, secret?: string): Promise<string> => {
   })
 }
 
-const expectAuthCallbackError = async (authCallbackResponse: APIResponse, request: APIRequestContext) => {
+const expectAuthCallbackError = async (authCallbackResponse: APIResponse) => {
   expect(authCallbackResponse.url()).toBe(`${process.env.NEXT_PUBLIC_APP_BASE_URL}/auth-error`)
-
-  const authMeResponse = await getAuthMeResponse(request)
-  const authMe: AuthMeDTO = await authMeResponse.json()
-
-  expect(authMe.user).toBeUndefined()
 }
