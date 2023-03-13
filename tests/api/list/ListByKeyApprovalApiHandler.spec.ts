@@ -67,3 +67,15 @@ test.describe('given signed in as reviewer', () => {
     })
   })
 })
+
+test.describe('given signed in but no role', () => {
+  withAuth(findTestUser(({ hasNoRole }) => hasNoRole).any())
+
+  test.describe('when approve list', () => {
+    test('should receive error', async ({ request }) => {
+      const approveListResponse = await getApproveListResponse(request, 'owner', 'repo')
+
+      expect(approveListResponse.ok()).toBe(false)
+    })
+  })
+})
